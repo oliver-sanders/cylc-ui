@@ -40,13 +40,13 @@ jobs:
         run: |
           echo 'foo' >> README.md
           # python etc/uid.py --fix
-          # if $(git diff); then
-          #   echo '::set-output_changed=false'
-          # else
-          #   echo '::set-output_changed=true'
-          #   git add -u
-          #   git commit -m 'uid: update regex'
-          # fi
+          if $(git diff); then
+            echo '::set-output_changed=false'
+          else
+            echo '::set-output_changed=true'
+            git add -u
+            git commit -m 'uid: update regex'
+          fi
 
       - name: Create pull request
         if: steps.diff.outputs.output_changed
