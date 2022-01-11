@@ -7,7 +7,7 @@ on:
     - cron: '25 4 1 1 *' # Every Jan 1st @ 04:25 UTC
 
 jobs:
-  unit-test-and-build:
+  uid:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout cylc-ui
@@ -38,14 +38,15 @@ jobs:
       - name: Check diff
         id: diff
         run: |
-          python etc/uid.py --fix
-          if $(git diff); then
-            echo '::set-output_changed=false'
-          else
-            echo '::set-output_changed=true'
-            git add -u
-            git commit -m 'uid: update regex'
-          fi
+          echo 'foo' >> README.md
+          # python etc/uid.py --fix
+          # if $(git diff); then
+          #   echo '::set-output_changed=false'
+          # else
+          #   echo '::set-output_changed=true'
+          #   git add -u
+          #   git commit -m 'uid: update regex'
+          # fi
 
       - name: Create pull request
         if: steps.diff.outputs.output_changed
