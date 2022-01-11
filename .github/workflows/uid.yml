@@ -41,9 +41,9 @@ jobs:
           echo 'foo' >> README.md
           # python etc/uid.py --fix
           if $(git diff); then
-            echo '::set-output_changed=false'
+            echo '::set-output name=changed::false'
           else
-            echo '::set-output_changed=true'
+            echo '::set-output name=changed::true'
             git add -u
             git commit -m 'uid: update regex'
           fi
