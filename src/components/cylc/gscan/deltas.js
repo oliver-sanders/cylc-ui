@@ -27,19 +27,17 @@ function applyDeltasAdded (added, workflows) {
   const result = {
     errors: []
   }
-  if (added && added.workflow && added.workflow.status) {
-    try {
-      Vue.set(workflows, added.workflow.id, added.workflow)
-    } catch (error) {
-      result.errors.push([
-        'Error applying GScan added-delta, see browser console logs for more. Please reload your browser tab to retrieve the full flow state',
-        error,
-        added,
-        workflows
-      ])
-    }
+  try {
+    workflows = Object.assign({}, workflows, added)
+  } catch (error) {
+    result.errors.push([
+      'Error applying GScan added-delta, see browser console logs for more. Please reload your browser tab to retrieve the full flow state',
+      error,
+      added,
+      workflows
+    ])
   }
-  return result
+  return [workflows, result]
 }
 
 /**

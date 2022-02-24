@@ -30,6 +30,9 @@ class GScanCallback extends DeltasCallback {
   constructor () {
     super()
     this.workflows = null
+    // this.addQ = []
+    this.addMe = {}
+    this.addTimer = null
   }
 
   before (deltas, store, errors) {
@@ -43,8 +46,35 @@ class GScanCallback extends DeltasCallback {
 
   onAdded (added, store, errors) {
     this.workflows = Object.assign(this.workflows, store.state.workflows.workflows)
-    const results = applyDeltasAdded(added, this.workflows)
+    if (added && added.workflow && added.workflow.status) {
+      this.addMe[added.workflow.id] = added.workflow
+      const that = this
+      if (Object.keys(this.workflows).length < 20) {
+        this.doAdd(errors, store, false)
+      } else {
+        // data store is getting large - use a timeout
+        if (!this.addTimer) {
+          this.addTimer = setTimeout(
+            function () {
+              that.doAdd(errors, store, true)
+            },
+            1000
+          )
+        }
+      }
+    }
+  }
+
+  doAdd (errors, store, commit) {
+    // this.workflows = Object.assign({}, this.workflows, this.addMe)
+    const [workflows, results] = applyDeltasAdded(this.addMe, this.workflows)
     errors.push(...results.errors)
+    this.addMe = {}
+    this.addTimer = null
+    this.workflows = workflows
+    if (commit) {
+      store.commit('workflows/SET_WORKFLOWS', this.workflows)
+    }
   }
 
   onUpdated (updated, store, errors) {
