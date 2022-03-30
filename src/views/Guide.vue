@@ -28,6 +28,101 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             * tracks scroll position
     -->
 
+    <h2 id="interaction">
+      Interaction
+    </h2>
+    <div class="card-grid">
+      <v-flex
+        md6
+        xs12
+      >
+        <v-card>
+          <v-card-title primary-title>
+            <p class="display-1 text--primary">Menus</p>
+          </v-card-title>
+          <v-card-text>
+            <p>
+              Workflows, cycle points, families, tasks and jobs are represented
+              by icons.
+            </p>
+            <p>
+              These icons are interactive, click or tap on the icon to
+              reveal the actions you can perform on this node.
+            </p>
+
+            Try me:
+            <table>
+              <tr>
+                <td>
+                  <WorkflowIcon
+                    class="mr-2"
+                    :status="WorkflowState.RUNNING.name"
+                    v-cylc-object='{"id": "~demo_user/demo_workflow", "state": WorkflowState.RUNNING.name}'
+                    style="font-size: 2em;"
+                  />
+                </td>
+                <td>
+                  A workflow
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <task
+                    :status="TaskState.RUNNING.name"
+                    v-cylc-object='{"id": "~demo_user/demo_workflow//1", "state": TaskState.RUNNING.name}'
+                    style="font-size: 1.5em;"
+                  />
+                </td>
+                <td>
+                  A cycle point
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <task
+                    :status="TaskState.RUNNING.name"
+                    :startTime="Date.now()"
+                    :estimatedDuration="30"
+                    v-cylc-object='{"id": "~demo_user/demo_workflow//1/demo_task", "state": TaskState.RUNNING.name}'
+                    style="font-size: 1.5em;"
+                  />
+                </td>
+                <td>
+                A task
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <job
+                    :status="TaskState.RUNNING.name"
+                    v-cylc-object='{"id": "~demo_user/demo_workflow//1/demo_task/01", "state": TaskState.RUNNING.name}'
+                  />
+                </td>
+                <td>
+                  A job
+                </td>
+              </tr>
+            </table>
+            The edit icon allows you to configure the action before it is run.
+          </v-card-text>
+        </v-card>
+      </v-flex>
+
+      <v-flex
+        md6
+        xs12
+      >
+        <v-card>
+          <v-card-title primary-title>
+            <p class="display-1 text--primary">Toolbar</p>
+          </v-card-title>
+          <v-card-text>
+            insert workflow toolbar
+          </v-card-text>
+        </v-card>
+      </v-flex>
+    </div>
+
     <h2 id="task-and-job-states">
       Task And Job States
     </h2>
@@ -162,20 +257,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <script>
 import Task from '@/components/cylc/Task'
 import Job from '@/components/cylc/Job'
-import { TaskStateUserOrder } from '@/model/TaskState.model'
+import { TaskStateUserOrder, TaskState } from '@/model/TaskState.model'
+import { WorkflowState } from '@/model/WorkflowState.model'
 import subscriptionViewMixin from '@/mixins/subscriptionView'
+import WorkflowIcon from '@/components/cylc/gscan/WorkflowIcon'
 
 export default {
   name: 'Guide',
   mixins: [subscriptionViewMixin],
   components: {
     task: Task,
-    job: Job
+    job: Job,
+    WorkflowIcon
   },
   // TODO: extract task states and descriptions from the GraphQL API
   //       once this is an enumeration.
   data: () => ({
-    states: TaskStateUserOrder
+    states: TaskStateUserOrder,
+    TaskState,
+    WorkflowState
   })
 }
 </script>

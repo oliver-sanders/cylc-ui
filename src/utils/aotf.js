@@ -673,6 +673,11 @@ async function _mutateError (mutationName, message, response) {
  * @returns {Array} [status, result]
  */
 export async function mutate (mutation, args, apolloClient) {
+  if ((args.workflows || ['x'])[0] === '~demo_user/demo_workflow') {
+    // demo mutation e.g. for the help section
+    console.log('Not executing demo mutation')
+    return [TaskState.SUBMITTED, null]
+  }
   let response = null
   // eslint-disable-next-line no-console
   console.debug([
