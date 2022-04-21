@@ -5,7 +5,7 @@ __metadata:
   version: 4
   cacheKey: 8
 
-"@apollo/client@npm:^3.5.8":
+"@apollo/client@npm:3.5.9":
   version: 3.5.9
   resolution: "@apollo/client@npm:3.5.9"
   dependencies:
@@ -7142,7 +7142,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "cylc-ui@workspace:."
   dependencies:
-    "@apollo/client": ^3.5.8
+    "@apollo/client": 3.5.9
     "@babel/core": ^7.14.8
     "@babel/eslint-parser": ^7.16.5
     "@babel/plugin-proposal-class-properties": ^7.14.5
@@ -7192,7 +7192,7 @@ __metadata:
     graphiql: ~1.5.1
     graphql: ~15.7.2
     graphql-language-service-utils: ^2.5.3
-    graphql-tag: ~2.12.6
+    graphql-tag: 2.12.6
     istanbul-instrumenter-loader: ^3.0.1
     istanbul-lib-coverage: ^3.0.0
     json-server: ^0.17.0
@@ -10007,6 +10007,17 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"graphql-tag@npm:2.12.6":
+  version: 2.12.6
+  resolution: "graphql-tag@npm:2.12.6"
+  dependencies:
+    tslib: ^2.1.0
+  peerDependencies:
+    graphql: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+  checksum: b15162a3d62f17b9b79302445b9ee330e041582f1c7faca74b9dec5daa74272c906ec1c34e1c50592bb6215e5c3eba80a309103f6ba9e4c1cddc350c46f010df
+  languageName: node
+  linkType: hard
+
 "graphql-tag@npm:^2.12.3":
   version: 2.12.5
   resolution: "graphql-tag@npm:2.12.5"
@@ -10015,17 +10026,6 @@ fsevents@^1.2.7:
   peerDependencies:
     graphql: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
   checksum: 7afe8b0a261bc81278e8350cbc48a641986665fa88521ece137feb8d1d62aacbe79afd4e159b618d56af106291ae8369592e46584fd8fbaf4f440201ea884fdd
-  languageName: node
-  linkType: hard
-
-"graphql-tag@npm:~2.12.6":
-  version: 2.12.6
-  resolution: "graphql-tag@npm:2.12.6"
-  dependencies:
-    tslib: ^2.1.0
-  peerDependencies:
-    graphql: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-  checksum: b15162a3d62f17b9b79302445b9ee330e041582f1c7faca74b9dec5daa74272c906ec1c34e1c50592bb6215e5c3eba80a309103f6ba9e4c1cddc350c46f010df
   languageName: node
   linkType: hard
 
