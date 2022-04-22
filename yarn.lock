@@ -7216,7 +7216,7 @@ __metadata:
     vue-cli-plugin-eslint-config-vuetify: 0.0.3
     vue-cli-plugin-vuetify: ^2.4.2
     vue-cli-plugin-vuetify-essentials: ^0.8.3
-    vue-i18n: ^8.27.0
+    vue-i18n: 8.27.1
     vue-markdown: ^2.2.4
     vue-meta: ^2.4.0
     vue-router: ^3.5.3
@@ -18594,10 +18594,10 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"vue-i18n@npm:^8.27.0":
-  version: 8.27.0
-  resolution: "vue-i18n@npm:8.27.0"
-  checksum: 6d5af73e3ef219fa2948f508b2fcbee5d669459293f2fab2a08bebaad80f93b6190b0fcae7b5f7b1aa7eab61c896e6b2d4a7e52483282d64f9f5e1d9d0d3af10
+"vue-i18n@npm:8.27.1":
+  version: 8.27.1
+  resolution: "vue-i18n@npm:8.27.1"
+  checksum: ee712fcdd503d73d63c9de82bb7315962205b3cd4339c414e9183c5a7b760ce465d2e0bf285aaa3617e8edd37b5004904881b7c406492bde41762865228ce920
   languageName: node
   linkType: hard
 
