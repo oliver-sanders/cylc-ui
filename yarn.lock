@@ -3940,6 +3940,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vue/devtools-api@npm:^6.0.0":
+  version: 6.1.4
+  resolution: "@vue/devtools-api@npm:6.1.4"
+  checksum: 027bb138b03ec7147dd15e5d0ef28d5b72c822530396cc8a86bc6fdb049dc6850314b9e897e497064e3ed47fad229a18141f56b8b8ca3d41092a576dc5b6538d
+  languageName: node
+  linkType: hard
+
 "@vue/preload-webpack-plugin@npm:^1.1.0":
   version: 1.1.2
   resolution: "@vue/preload-webpack-plugin@npm:1.1.2"
@@ -7348,7 +7355,7 @@ __metadata:
     vue-i18n: ^8.27.0
     vue-markdown: ^2.2.4
     vue-meta: ^2.4.0
-    vue-router: ^3.5.3
+    vue-router: ^4.0.0
     vue-spinner: ^1.0.4
     vue-template-compiler: ^2.6.14
     vue-the-mask: ^0.11.1
@@ -19035,10 +19042,14 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"vue-router@npm:^3.5.3":
-  version: 3.5.3
-  resolution: "vue-router@npm:3.5.3"
-  checksum: 7b2cc0d41ff2a8ec3da45761f29e14d0998119f47e4887f54e17eb534f7b4823acb778302891b0aa3a10c62ae8ba999393d7891cc08d36f02ea87aa268e2a36c
+"vue-router@npm:^4.0.0":
+  version: 4.0.14
+  resolution: "vue-router@npm:4.0.14"
+  dependencies:
+    "@vue/devtools-api": ^6.0.0
+  peerDependencies:
+    vue: ^3.2.0
+  checksum: 694f6a85f82c11321ecbbb181db9b1a63fe99f781f33feab56c6ed1924370553b9d4325a9bdc1fbd3bfacb4cea12ef37cee77bc91974c1c6314e07fe8193941b
   languageName: node
   linkType: hard
 
