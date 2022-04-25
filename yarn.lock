@@ -4790,6 +4790,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"autoprefixer@npm:^10.0.0":
+  version: 10.4.5
+  resolution: "autoprefixer@npm:10.4.5"
+  dependencies:
+    browserslist: ^4.20.2
+    caniuse-lite: ^1.0.30001332
+    fraction.js: ^4.2.0
+    normalize-range: ^0.1.2
+    picocolors: ^1.0.0
+    postcss-value-parser: ^4.2.0
+  peerDependencies:
+    postcss: ^8.1.0
+  bin:
+    autoprefixer: bin/autoprefixer
+  checksum: 6c638d8f515a9c37776f9d6b1263e497768d9e8d8ad3b45d901513ba0f26c74df73f4afb84efd3253ab3d1c57803b4e2d97ad9b8919ef1955e373fcf24661213
+  languageName: node
+  linkType: hard
+
 "autoprefixer@npm:^9.8.6":
   version: 9.8.8
   resolution: "autoprefixer@npm:9.8.8"
@@ -5631,6 +5649,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"browserslist@npm:^4.20.2":
+  version: 4.20.3
+  resolution: "browserslist@npm:4.20.3"
+  dependencies:
+    caniuse-lite: ^1.0.30001332
+    electron-to-chromium: ^1.4.118
+    escalade: ^3.1.1
+    node-releases: ^2.0.3
+    picocolors: ^1.0.0
+  bin:
+    browserslist: cli.js
+  checksum: 1e4b719ac2ca0fe235218a606e8b8ef16b8809e0973b924158c39fbc435a0b0fe43437ea52dd6ef5ad2efcb83fcb07431244e472270177814217f7c563651f7d
+  languageName: node
+  linkType: hard
+
 "buffer-crc32@npm:~0.2.3":
   version: 0.2.13
   resolution: "buffer-crc32@npm:0.2.13"
@@ -5970,6 +6003,13 @@ __metadata:
   version: 1.0.30001302
   resolution: "caniuse-lite@npm:1.0.30001302"
   checksum: 612689059f6a9aeebad43afeabac655308ddbad8e0f345030edf7656564cf9d0d5af10e3cbf61b64b09b06a97f82ba3788f5621d6526c7a3e7e068cae88d6782
+  languageName: node
+  linkType: hard
+
+"caniuse-lite@npm:^1.0.30001332":
+  version: 1.0.30001332
+  resolution: "caniuse-lite@npm:1.0.30001332"
+  checksum: e54182ea42ab3d2ff1440f9a6480292f7ab23c00c188df7ad65586312e4da567e8bedd5cb5fb8f0ff4193dc027a54e17e0b3c0b6db5d5a3fb61c7726ff9c45b3
   languageName: node
   linkType: hard
 
@@ -7291,7 +7331,7 @@ __metadata:
     "@vue/cli-plugin-unit-mocha": ^5.0.1
     "@vue/cli-service": ^4.5.15
     "@vue/test-utils": ^1.2.2
-    autoprefixer: ^9.8.6
+    autoprefixer: ^10.0.0
     axios: ^0.27.0
     axios-fetch: ^1.1.0
     babel-eslint: ^10.1.0
@@ -8117,6 +8157,13 @@ __metadata:
   version: 1.3.870
   resolution: "electron-to-chromium@npm:1.3.870"
   checksum: 9df27edad99ec93124474e1c16e8789a6be750b41f2021611e912104a521220b8d9138457ca49519031779c265612fa315e4fab651e4054e5bcd8922423defb2
+  languageName: node
+  linkType: hard
+
+"electron-to-chromium@npm:^1.4.118":
+  version: 1.4.119
+  resolution: "electron-to-chromium@npm:1.4.119"
+  checksum: af77e5e0e606f6b639456b60eb76a9a2301cda049b911cd6439fe34c67f790471adb8b53e5e9a3df6ece5461ec394d33305b5db24c6c9b8fa653cef4446b6573
   languageName: node
   linkType: hard
 
@@ -9676,6 +9723,13 @@ __metadata:
   version: 0.2.0
   resolution: "forwarded@npm:0.2.0"
   checksum: fd27e2394d8887ebd16a66ffc889dc983fbbd797d5d3f01087c020283c0f019a7d05ee85669383d8e0d216b116d720fc0cef2f6e9b7eb9f4c90c6e0bc7fd28e6
+  languageName: node
+  linkType: hard
+
+"fraction.js@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "fraction.js@npm:4.2.0"
+  checksum: 8c76a6e21dedea87109d6171a0ac77afa14205794a565d71cb10d2925f629a3922da61bf45ea52dbc30bce4d8636dc0a27213a88cbd600eab047d82f9a3a94c5
   languageName: node
   linkType: hard
 
@@ -13880,6 +13934,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"node-releases@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "node-releases@npm:2.0.3"
+  checksum: 5e555fbbebb3343a5d1e5f4e10e1737998bedc57472a35027410d17b2678ed9bc0e5fae008f513798a960eb8687159331b1f46f82a3210d39bd7c40d3c9dcead
+  languageName: node
+  linkType: hard
+
 "nodemon@npm:^2.0.15":
   version: 2.0.15
   resolution: "nodemon@npm:2.0.15"
@@ -15439,6 +15500,13 @@ fsevents@^1.2.7:
   version: 4.1.0
   resolution: "postcss-value-parser@npm:4.1.0"
   checksum: 68a9ea27c780fa3cc350be37b47cc46385c61dd9627990909230e0e9c3debf6d5beb49006bd743a2e506cdd6fa7d07637f2d9504a394f67cc3011d1ff0134886
+  languageName: node
+  linkType: hard
+
+"postcss-value-parser@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "postcss-value-parser@npm:4.2.0"
+  checksum: 819ffab0c9d51cf0acbabf8996dffbfafbafa57afc0e4c98db88b67f2094cb44488758f06e5da95d7036f19556a4a732525e84289a425f4f6fd8e412a9d7442f
   languageName: node
   linkType: hard
 
