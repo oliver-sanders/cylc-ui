@@ -55,9 +55,11 @@ describe('Graph View', () => {
         const el1 = $el[0]
         const matrix1 = el1.transform.baseVal[0].matrix
         for (const el2 of $list) {
-          const matrix2 = el2.transform.baseVal[0].matrix
-          console.log(el1, el2)
-          expect(matrix1).to.not.equal(matrix2)
+          if (el1 !== el2) {
+            const matrix2 = el2.transform.baseVal[0].matrix
+            console.log(el1, el2)
+            expect(matrix1).to.not.equal(matrix2)
+          }
         }
       })
 
