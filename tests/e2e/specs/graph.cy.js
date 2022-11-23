@@ -25,9 +25,9 @@ function waitForGraphLayout () {
 function checkGraphLayoutPerformed ($el, depth = 0) {
   // Check if the graphID has been set (indicating successful layout) or wait
   // one second.
-  // This is a recursive function which will be called up to 10 times. We can't
+  // This is a recursive function which will be called up to 20 times. We can't
   // do this in a for loop as otherwise the waits aren't chained correctly.
-  if (depth > 10) {
+  if (depth > 20) {
     expect('graph loaded').to.equal(true)
   } else if (typeof $el[0].__vue__.graphID !== 'number') {
     cy
@@ -43,6 +43,7 @@ describe('Graph View', () => {
 
     cy
       // there should be 7 graph nodes (all on-screen)
+      .wait(1000)
       .get('.c-graph:first')
       .find('.graph-node-container')
       .should('be.visible')
@@ -55,6 +56,7 @@ describe('Graph View', () => {
         const matrix1 = el1.transform.baseVal[0].matrix
         for (const el2 of $list) {
           const matrix2 = el2.transform.baseVal[0].matrix
+          console.log(el1, el2)
           expect(matrix1).to.not.equal(matrix2)
         }
       })
