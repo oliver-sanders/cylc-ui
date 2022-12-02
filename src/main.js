@@ -22,6 +22,8 @@ import Vue from 'vue'
 // Plugins
 import './plugins'
 import vuetify from './plugins/vuetify'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 
 // Application imports
 import App from './App'
@@ -32,6 +34,8 @@ import store from '@/store/index'
 import mitt from 'mitt'
 
 Vue.prototype.$eventBus = mitt()
+
+Vue.use(ElementUI)
 
 Vue.config.productionTip = false
 

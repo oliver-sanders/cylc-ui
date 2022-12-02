@@ -16,47 +16,49 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <template>
-  <v-form
+  <el-form
     :value="value"
+    label-width="auto"
     @input="$emit('input', $event)"
   >
     <!-- the form inputs -->
-    <v-list>
-      <v-list-item
-        v-for="input in inputs"
-        v-bind:key="input.label"
-      >
-        <v-list-item-content>
-          <v-list-item-title>
-            <!-- input label - the display title for this input -->
-            {{ input.label }}
-            <!-- help button - tooltip for more information -->
-            <v-tooltip bottom
-              v-if="input.description"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon
-                  v-bind="attrs"
-                  v-on="on"
-                >
-                  {{ icons.help }}
-                </v-icon>
-              </template>
-              <Markdown
-                :markdown="input.description"
-              />
-            </v-tooltip>
-          </v-list-item-title>
-          <FormInput
-            v-model="model[input.label]"
-            :gqlType="input.gqlType"
-            :types="types"
-            :label="input.label"
+    <el-form-item
+      v-for="input in inputs"
+      v-bind:key="input.label"
+      :label="input.label"
+    >
+      <!-- the label -->
+      <template v-slot:label>
+        {{ input.title }}
+
+        <!-- the help button/popover -->
+        <el-popover
+          trigger="click"
+          width="350"
+          style="padding-left: 0.5em;"
+        >
+          <el-button
+            circle
+            size="mini"
+            slot="reference"
+            icon="el-icon-help"
           />
-        </v-list-item-content>
-      </v-list-item>
-    </v-list>
-  </v-form>
+          <!-- the help text -->
+          <template>
+            <Markdown :markdown="input.description" />
+          </template>
+        </el-popover>
+      </template>
+
+      <!-- the input -->
+      <FormInput
+        v-model="model[input.label]"
+        :gqlType="input.gqlType"
+        :types="types"
+        :label="input.label"
+      />
+    </el-form-item>
+  </el-form>
 </template>
 
 <script>
@@ -110,11 +112,22 @@ export default {
     /* Provide a list of all form inputs for this mutation. */
     inputs () {
       const ret = []
+      let type
       for (const arg of this.mutation.args) {
+        type = this.types.filter((type) =>
+          type.name === arg.type.name && type.kind === arg.type.kind
+        )
+        let help = arg.description || ''
+        if (type.length && type[0].description) {
+          // if the type has help add it onto the end of the description
+          help = `${help}\n\n${type[0].description}`
+        }
+
         ret.push({
           gqlType: arg.type,
+          title: arg._title,
           label: arg.name,
-          description: arg.description
+          description: help
         })
       }
       return ret

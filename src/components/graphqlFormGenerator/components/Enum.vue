@@ -16,15 +16,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <template>
-  <v-select
-    persistent-hint
+  <el-select
     v-model="model"
     v-bind="$attrs"
-    :items="type.enumValues"
-    item-text="name"
-    :hint="itemDesc"
     placeholder="Select an option"
-  />
+  >
+    <el-option
+      v-for="item of type.enumValues"
+      :key="item.name"
+      :label="item.name"
+      :value="item.name"
+    >
+      <b><span>{{ item.name }}</span></b>
+      -
+      <span>{{ item.description }}</span>
+    </el-option>
+    <!-- TODO: itemDesc -->
+  </el-select>
 </template>
 
 <script>

@@ -4202,6 +4202,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"async-validator@npm:~1.8.1":
+  version: 1.8.5
+  resolution: "async-validator@npm:1.8.5"
+  dependencies:
+    babel-runtime: 6.x
+  checksum: 3c526e3578119cf1c54bb033a931d63772bcf022ca1edb81f2a4799a90666e90b28d8c48fd82c9e67b1756f130dffdaad051bee1b7c3da7243d232356a388b93
+  languageName: node
+  linkType: hard
+
 "async@npm:^2.6.2":
   version: 2.6.4
   resolution: "async@npm:2.6.4"
@@ -4309,6 +4318,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"babel-helper-vue-jsx-merge-props@npm:^2.0.0":
+  version: 2.0.3
+  resolution: "babel-helper-vue-jsx-merge-props@npm:2.0.3"
+  checksum: 94d354b401fae665137433632d6ecb4f212217c115feb06b2544987939fdb2735b35bc856eb99e306e8ead5f840b7891d8e050916a76c025b2380ee052a3b8df
+  languageName: node
+  linkType: hard
+
 "babel-loader@npm:^8.1.0, babel-loader@npm:^8.2.3":
   version: 8.2.5
   resolution: "babel-loader@npm:8.2.5"
@@ -4391,7 +4407,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-runtime@npm:^6.22.0, babel-runtime@npm:^6.26.0":
+"babel-runtime@npm:6.x, babel-runtime@npm:^6.22.0, babel-runtime@npm:^6.26.0":
   version: 6.26.0
   resolution: "babel-runtime@npm:6.26.0"
   dependencies:
@@ -6433,6 +6449,7 @@ __metadata:
     cross-fetch: ^3.1.5
     cypress: ^10.10.0
     dedent: ^0.7.0
+    element-ui: ^2.15.12
     enumify: ^2.0.0
     eslint: ^8.0.0
     eslint-config-standard: ^17.0.0
@@ -6729,7 +6746,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"deepmerge@npm:^1.5.2":
+"deepmerge@npm:^1.2.0, deepmerge@npm:^1.5.2":
   version: 1.5.2
   resolution: "deepmerge@npm:1.5.2"
   checksum: 5ecfe328e0105f2c554b90af555cbba052ab4468f1893e3b26800cb8869d3c1a1c590a5bbe1fdf481a8cc89b1bc47b5ac73a7153d5a0e4b702ea6eca081038a8
@@ -7213,6 +7230,22 @@ __metadata:
   version: 1.4.172
   resolution: "electron-to-chromium@npm:1.4.172"
   checksum: fe1db1c41cea55d700871f051f4662c5d988db9eca5f3f234294b73ccbaa2eabfd8349fa9c68433f5d6160988c604eff6bbf41f0600694ec03e758c0eb010355
+  languageName: node
+  linkType: hard
+
+"element-ui@npm:^2.15.12":
+  version: 2.15.12
+  resolution: "element-ui@npm:2.15.12"
+  dependencies:
+    async-validator: ~1.8.1
+    babel-helper-vue-jsx-merge-props: ^2.0.0
+    deepmerge: ^1.2.0
+    normalize-wheel: ^1.0.1
+    resize-observer-polyfill: ^1.5.0
+    throttle-debounce: ^1.0.1
+  peerDependencies:
+    vue: ^2.5.17
+  checksum: 63041a52b669419a8b7d5cc1c2e9eff5bb889cbb428501e29842e1f49497fb83527567d887ce9d1952bb034ed9c2d7120e49b0981fa3ffe1c9e8c7620e3a07e4
   languageName: node
   linkType: hard
 
@@ -12577,6 +12610,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"normalize-wheel@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "normalize-wheel@npm:1.0.1"
+  checksum: 00b32efa040bad9438e732385a4ca27f8532fa2c8c06b54be43b9f75b2da6642bf41a0b4f81e542639dc8d682cde8b059b0a02ae0723fb8ebc3c8f036c8e51d8
+  languageName: node
+  linkType: hard
+
 "npm-run-path@npm:^2.0.0":
   version: 2.0.2
   resolution: "npm-run-path@npm:2.0.2"
@@ -14683,6 +14723,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"resize-observer-polyfill@npm:^1.5.0":
+  version: 1.5.1
+  resolution: "resize-observer-polyfill@npm:1.5.1"
+  checksum: 57e7f79489867b00ba43c9c051524a5c8f162a61d5547e99333549afc23e15c44fd43f2f318ea0261ea98c0eb3158cca261e6f48d66e1ed1cd1f340a43977094
+  languageName: node
+  linkType: hard
+
 "resolve-alpn@npm:^1.2.0":
   version: 1.2.1
   resolution: "resolve-alpn@npm:1.2.1"
@@ -16345,6 +16392,13 @@ __metadata:
   peerDependencies:
     webpack: ^2.0.0 || ^3.0.0 || ^4.0.0
   checksum: da11b7d0188add50becdffaf3ad44f19bcbae05bfd359af7f08a3a35a85995df73455ea90f45ac14885b299d98faeceaaf7e23f3d508b20d3d9b3ea588af5174
+  languageName: node
+  linkType: hard
+
+"throttle-debounce@npm:^1.0.1":
+  version: 1.1.0
+  resolution: "throttle-debounce@npm:1.1.0"
+  checksum: f465f06b11aa6d4b70281615b3d13b610f685220a63d56f40c0caf7257a7be55c72868b974f5438591f509cb1b9756cf10cfad5b409e487e4ed022e9bb61e61f
   languageName: node
   linkType: hard
 

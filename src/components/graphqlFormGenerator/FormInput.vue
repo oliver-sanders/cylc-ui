@@ -24,7 +24,8 @@ dynamically created inputs.
 import { mask } from 'vue-the-mask'
 import Markdown from '@/components/Markdown'
 import { formElement } from '@/components/graphqlFormGenerator/mixins'
-import VuetifyConfig, { getComponentProps } from '@/components/graphqlFormGenerator/components/vuetify'
+// import VuetifyConfig, { getComponentProps } from '@/components/graphqlFormGenerator/components/vuetify'
+import ElementConfig, { getComponentProps } from '@/components/graphqlFormGenerator/components/element'
 import { mdiHelpCircleOutline } from '@mdi/js'
 import { VIcon, VTooltip } from 'vuetify/lib/components'
 
@@ -79,11 +80,11 @@ export default {
      */
     props () {
       // get the default props for this graphQL type
-      const componentProps = getComponentProps(this.gqlType, VuetifyConfig.namedTypes, VuetifyConfig.kinds)
+      const componentProps = getComponentProps(this.gqlType, ElementConfig.namedTypes, ElementConfig.kinds)
 
       // merge this in with default and override props
       const propGroups = [
-        VuetifyConfig.defaultProps,
+        ElementConfig.defaultProps,
         componentProps,
         this.propOverrides || {}
       ]
@@ -104,35 +105,6 @@ export default {
   render (createElement) {
     // https://v2.vuejs.org/v2/guide/render-function.html
 
-    const createHelpIcon = () => createElement(
-      VTooltip,
-      {
-        props: {
-          bottom: true
-        },
-        scopedSlots: {
-          activator: ({ on }) => createElement(
-            VIcon,
-            {
-              on,
-              style: {
-                cursor: 'default'
-              }
-            },
-            [mdiHelpCircleOutline]
-          ),
-          default: () => createElement(
-            Markdown,
-            {
-              props: {
-                markdown: this.help
-              }
-            }
-          )
-        }
-      }
-    )
-
     // Some components implement custom v-model
     // (https://v2.vuejs.org/v2/guide/components-custom-events.html#Customizing-Component-v-model)
     const vModel = this.props.is.options?.model || { prop: 'value', event: 'input' }
@@ -152,9 +124,6 @@ export default {
           }
         },
         scopedSlots: {
-          append: vuetifyScopedSlotShim(
-            createHelpIcon
-          ),
           'append-outer': vuetifyScopedSlotShim(
             // pass the "append-outer" slot onto the child component
             (slotProps) => this.$scopedSlots['append-outer']?.(slotProps)

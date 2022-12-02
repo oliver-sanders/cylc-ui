@@ -29,6 +29,7 @@
     "axios": "^0.27.0",
     "core-js": "3",
     "dedent": "^0.7.0",
+    "element-ui": "^2.15.12",
     "enumify": "^2.0.0",
     "graphiql": "~1.8.0",
     "graphql": "~15.8.0",

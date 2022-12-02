@@ -16,47 +16,43 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <template>
-  <v-list dense>
-    <v-list-item-content>
-      <v-list-item
-        v-for="(item, index) in value"
-        :key="index"
-      >
-        <v-list-item-content>
-          <!-- The input -->
-          <component
-            v-model="value[index]"
-            :propOverrides="{dense: true}"
-            :gqlType="gqlType.ofType"
-            :types="types"
-            :is="FormInput"
-            ref="inputs"
-          >
-            <!-- NOTE: we use :is here due to a nested component registration issue. -->
-            <template v-slot:append-outer="slotProps">
-              <v-icon
-                @click="remove(index)"
-                v-bind="slotProps"
-                class="remove-btn"
-              >
-                {{ svgPaths.close }}
-              </v-icon>
-            </template>
-          </component>
-        </v-list-item-content>
-      </v-list-item>
-      <v-list-item>
-        <v-btn
-         @click="add()"
-         text
-         data-cy="add"
-        >
-          <v-icon>{{ svgPaths.open }}</v-icon>
-          <span>Add Item</span>
-        </v-btn>
-      </v-list-item>
-    </v-list-item-content>
-  </v-list>
+  <div class="g-list">
+    <el-row
+      v-for="(item, index) in value"
+      :key="index"
+    >
+      <el-col :span="21">
+        <!-- The input -->
+        <component
+          v-model="value[index]"
+          :propOverrides="{dense: true}"
+          :gqlType="gqlType.ofType"
+          :types="types"
+          :is="FormInput"
+          ref="inputs"
+        />
+      </el-col>
+      <el-col :span="2" :offset="1">
+        <el-button
+          circle
+          @click="remove(index)"
+          v-bind="slotProps"
+          class="remove-btn"
+          icon="el-icon-close"
+          type="info"
+        />
+      </el-col>
+    </el-row>
+
+    <el-button
+      @click="add()"
+      data-cy="add"
+      icon="el-icon-circle-plus"
+      type="info"
+    >
+      <span>Add Item</span>
+    </el-button>
+  </div>
 </template>
 
 <script>
@@ -116,3 +112,9 @@ export default {
   }
 }
 </script>
+
+<style style="scss">
+.g-list > .el-row {
+  margin-bottom: 2em;
+}
+</style>

@@ -16,46 +16,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <template>
-    <v-card
-      class="mx-auto d-inline-block"
-      style="padding: 1em;"
-      outlined
-    >
+  <el-card
+    class="boc-card"
+  >
+    <div slot="header">
       <!-- the mutation title -->
-      <h3
-      style="text-transform: capitalize;"
-      >
+      <h3 style="text-transform: capitalize;">
         {{ mutation._title }}
       </h3>
 
       <!-- the mutation description -->
-      <v-expansion-panels
-      accordion
-      flat
-      v-bind="extendedDescription ? { hover: true } : { readonly: true }"
-      >
-        <v-expansion-panel
-          class="mutation-desc"
-        >
-          <v-expansion-panel-header
-            v-bind="extendedDescription ? {} : {
-              expandIcon: null,
-              style: {
-                cursor: 'default'
-              }
-            }"
-          >
-            <Markdown :markdown="shortDescription"/>
-          </v-expansion-panel-header>
-          <v-expansion-panel-content
-            v-if="extendedDescription"
-          >
-            <Markdown :markdown="extendedDescription"/>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
+      <Markdown :markdown="shortDescription"/>
+      <el-collapse-transition>
+        <div v-show="extendedDescription && showDescription">
+          <Markdown :markdown="extendedDescription"/>
+        </div>
 
-      <v-divider/>
+      </el-collapse-transition>
+      <el-button
+        v-show="extendedDescription"
+        @click="showDescription = !showDescription"
+      >
+        {{ showDescription ? 'Collapse' : 'Expand' }}
+      </el-button>
+    </div>
+
+    <div>
+      <!-- the form -->
       <EditRuntimeForm
         v-if="mutation.name === 'editRuntime'"
         v-bind="{
@@ -75,46 +62,44 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         ref="form"
         v-model="isValid"
       />
+
+      <!-- the actions -->
       <br />
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn
-          color="grey"
+      <div>
+        <el-button
+          type="info"
           @click="cancel()"
-          text
           data-cy="cancel"
         >
           Cancel
-        </v-btn>
-        <v-btn
-          color="orange"
+        </el-button>
+        <el-button
+          type="warning"
           @click="$refs.form.reset()"
-          text
           data-cy="reset"
         >
           Reset
-        </v-btn>
-        <v-tooltip
-          top
-          color="error"
+        </el-button>
+        <el-tooltip
+          placement="top"
           :disabled="isValid"
         >
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              text
-              :color="isValid ? 'primary' : 'error'"
-              @click="submit"
-              :loading="submitting"
-              v-bind="attrs"
-              v-on="on"
-              data-cy="submit"
-            >
-              Submit
-            </v-btn>
-          </template>
-          <span>Form contains invalid or missing values!</span>
-        </v-tooltip>
-      </v-card-actions>
+          <div slot="content">
+            <span>Form contains invalid or missing values!</span>
+          </div>
+          <!-- TODO
+            :loading="submitting"
+          -->
+          <el-button
+            :type="isValid ? 'primary' : 'danger'"
+            @click="submit"
+            v-bind="attrs"
+            data-cy="submit"
+          >
+            Submit
+          </el-button>
+        </el-tooltip>
+      </div>
       <v-snackbar
         v-model="showSnackbar"
         v-bind="snackbarProps"
@@ -134,7 +119,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
           </v-btn>
         </template>
       </v-snackbar>
-    </v-card>
+    </div>
+  </el-card>
 </template>
 
 <script>
@@ -186,6 +172,7 @@ export default {
   data: () => ({
     isValid: false,
     submitting: false,
+    showDescription: false,
     response: {
       msg: null,
       level: 'warn'
