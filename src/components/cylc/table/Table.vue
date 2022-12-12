@@ -110,12 +110,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             item-key="id"
             show-expand
           >
-
-            <!-- eslint-disable-next-line -->
-            <template v-slot:header.node_task_meanElapsedTime="{ header }">
-              <span v-html="header.text"></span>
-            </template>
-
             <template
               v-slot:item="{ item }"
             >
@@ -239,7 +233,7 @@ export default {
       headers: [
         {
           text: 'Task',
-          value: 'node_name',
+          value: 'node.name',
           sort: DEFAULT_COMPARATOR
         },
         {
@@ -249,12 +243,12 @@ export default {
         },
         {
           text: 'Cycle Point',
-          value: 'node_cyclePoint',
+          value: 'node.cyclePoint',
           sort: (a, b) => DEFAULT_COMPARATOR(String(a ?? ''), String(b ?? ''))
         },
         {
           text: 'Platform',
-          value: 'latestJob_platform',
+          value: 'latestJob.platform',
           sort: (a, b) => DEFAULT_COMPARATOR(a ?? '', b ?? '')
         },
         {
@@ -264,27 +258,27 @@ export default {
         },
         {
           text: 'Job ID',
-          value: 'latestJob_jobId',
+          value: 'latestJob.jobId',
           sort: (a, b) => parseInt(a ?? 0) - parseInt(b ?? 0)
         },
         {
           text: 'T-Submit',
-          value: 'latestJob_submittedTime',
+          value: 'latestJob.submittedTime',
           sort: datetimeComparator
         },
         {
           text: 'T-Start',
-          value: 'latestJob_startedTime',
+          value: 'latestJob.startedTime',
           sort: datetimeComparator
         },
         {
           text: 'T-Finish',
-          value: 'latestJob_finishedTime',
+          value: 'latestJob.finishedTime',
           sort: datetimeComparator
         },
         {
-          text: '&Delta;T-Mean',
-          value: 'node_task_meanElapsedTime',
+          text: 'T-Mean',
+          value: 'node_task.meanElapsedTime',
           sort: (a, b) => parseInt(a ?? 0) - parseInt(b ?? 0)
         }
       ],
