@@ -173,7 +173,7 @@ import {
   latestJob,
   jobMessageOutputs
 } from '@/utils/tasks'
-import { getNodeChildren, checkForBranchingLineage } from '@/components/cylc/tree/util'
+import { getNodeChildren, checkForBranchingLineage, getLastDescendent } from '@/components/cylc/tree/util'
 
 /**
  * Offset used to move nodes to the right or left, to represent the nodes hierarchy.
@@ -213,11 +213,6 @@ export default {
       type: Array,
       required: false,
       default: () => []
-    },
-    singleChildDescendancy: {
-      type: Boolean,
-      required: false,
-      default: () => false
     }
   },
   data () {
@@ -225,6 +220,7 @@ export default {
       active: false,
       selected: false,
       filtered: true,
+      firstInteraction: false,
       leafProperties: [
         {
           title: 'platform',
@@ -262,10 +258,13 @@ export default {
       deep: true,
       handler: function () {
         this.$nextTick(() => {
-          // apply auto-expand rules when a tree-item is updated, take into account singleChildDescendancy preference
-          // this.isExpanded = this.hasBranchingLineage && this.autoExpandTypes.includes(this.node.type)
-          this.isExpanded = this.autoExpandTypes.includes(this.node.type)
-          this.emitExpandCollapseEvent(this.isExpanded)
+          // apply auto-expand rules when a tree-item is updated, take into account singleChildDescendants preference
+          // this needs to happen until the user manually overrides the automatic opening and closing
+          if (!this.firstInteraction) {
+            this.isExpanded = this.hasBranchingLineage && this.autoExpandTypes.includes(this.node.type)
+            // this.isExpanded = this.autoExpandTypes.includes(this.node.type)
+            this.emitExpandCollapseEvent(this.isExpanded)
+          }
         })
       }
     }
@@ -307,7 +306,7 @@ export default {
       return {
         'node--hoverable': this.hoverable,
         'node--active': this.active,
-        'c-workflow-stopped': this.node?.node?.status === WorkflowState.STOPPED.name,
+        'c-workflow-stopped': getLastDescendent(this.node)?.node?.status === WorkflowState.STOPPED.name && !checkForBranchingLineage(this.node),
         expanded: this.isExpanded
       }
     },
@@ -344,13 +343,10 @@ export default {
   beforeDestroy () {
     this.$emit('tree-item-destroyed', this)
   },
-  beforeMount () {
-    // apply auto-expand rules when a tree-item is created, take into account singleChildDescendancy preference, although this may turn up after the first render (see above in watch function)
-    // this.isExpanded = this.singleChildDescendancy && this.autoExpandTypes.includes(this.node.type)
-    // this.emitExpandCollapseEvent(this.isExpanded)
-  },
   methods: {
+    getLastDescendent,
     toggleExpandCollapse () {
+      this.firstInteraction = true
       this.isExpanded = !this.isExpanded
       this.emitExpandCollapseEvent(this.isExpanded)
     },
@@ -360,11 +356,7 @@ export default {
      * @param {boolean} expanded whether the node is expanded or not
      */
     emitExpandCollapseEvent (expanded) {
-      if (expanded) {
-        this.$emit('tree-item-expanded', this)
-      } else {
-        this.$emit('tree-item-collapsed', this)
-      }
+      this.$emit(expanded ? 'tree-item-expanded' : 'tree-item-collapsed', this)
     },
     /**
      * Handler for when any node of the tree was clicked, except jobs.

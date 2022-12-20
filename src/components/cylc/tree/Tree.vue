@@ -78,7 +78,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             :stopOn="stopOn"
             :hoverable="hoverable"
             :autoExpandTypes="autoExpandTypes"
-            :singleChildDescendancy="shouldExpand(child)"
             :cyclePointsOrderDesc="cyclePointsOrderDesc"
             v-on:tree-item-created="onTreeItemCreated"
             v-on:tree-item-destroyed="onTreeItemDestroyed"
@@ -229,21 +228,6 @@ export default {
     }
   },
   methods: {
-    // this checks if any children have more then one sub children, in which case we should initially expand that tree item
-    shouldExpand (node) {
-      let expand = false
-      const recursiveChildrenCheck = (checkingNode) => {
-        if (expand === false && checkingNode.children.length > 0) {
-          if (checkingNode.children.length === 1) {
-            recursiveChildrenCheck(checkingNode.children[0])
-          } else {
-            expand = true
-          }
-        }
-      }
-      recursiveChildrenCheck(node)
-      return expand
-    },
     filterByTaskName () {
       return this.activeFilters.name !== undefined &&
           this.activeFilters.name !== null &&

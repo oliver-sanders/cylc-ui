@@ -101,7 +101,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
           <!-- this overwrites the node slot in the tree-item template, these are ALWAYS inserted where the node slot is regardless of its current value -->
           <template v-slot:node="scope">
 
-            <workflow-icon class="mr-2" v-if="scope.node.type === 'workflow' || !checkForBranchingLineage(scope.node)" :status="getLastDescendent(scope.node).node.status" v-cylc-object="getLastDescendent(scope.node)" />
+            <workflow-icon class="mr-2" v-if="scope.node.type === 'workflow' || !checkForBranchingLineage(scope.node)" :status="getLastDescendent(scope.node).node.status || 'waiting'" v-cylc-object="getLastDescendent(scope.node)" />
 
             <v-list-item :to="workflowLink(scope.node)">
               <v-list-item-title>
@@ -123,8 +123,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                   <!-- We check the latestStateTasks below as offline workflows won't have a latestStateTasks property -->
                   <v-flex v-if="(scope.node.type === 'workflow' || !checkForBranchingLineage(scope.node))" class="text-right c-gscan-workflow-states">
                     <!-- task summary tooltips -->
-<!--                    <span v-for="[state, tasks] in getLatestStateTasks(Object.entries(scope.node.node.latestStateTasks))" :key="`${scope.node.id}-summary-${state}`" :class="getTaskStateClasses(scope.node.node, state)">-->
-                    <span v-for="(tasks, state) in getAllDescendentTasks(scope.node)" :key="`${scope.node.id}-summary-${state}`" :class="tasks.length ? '' : 'empty-state'">
+                    <span v-for="(tasks, state) in getLatestDescendentTasks(scope.node)" :key="`${scope.node.id}-summary-${state}`" :class="tasks.length ? '' : 'empty-state'">
                     <v-tooltip color="black" top>
                       <template v-slot:activator="{ on }">
                         <!-- a v-tooltip does not work directly set on Cylc job component, so we use a dummy button to wrap it -->
@@ -175,7 +174,7 @@ import WorkflowIcon from '@/components/cylc/gscan/WorkflowIcon'
 import { filterHierarchically } from '@/components/cylc/gscan/filters'
 import { GSCAN_DELTAS_SUBSCRIPTION } from '@/graphql/queries'
 import { sortedWorkflowTree } from '@/components/cylc/gscan/sort.js'
-import { checkForBranchingLineage, createDescendentLabel, getLastDescendent, getAllDescendentTasks } from '@/components/cylc/tree/util'
+import { checkForBranchingLineage, createDescendentLabel, getLastDescendent, getLatestDescendentTasks } from '@/components/cylc/tree/util'
 
 export default {
   name: 'GScan',
@@ -362,7 +361,7 @@ export default {
   methods: {
     checkForBranchingLineage,
     createDescendentLabel,
-    getAllDescendentTasks,
+    getLatestDescendentTasks,
     getLastDescendent,
     filterHierarchically,
 

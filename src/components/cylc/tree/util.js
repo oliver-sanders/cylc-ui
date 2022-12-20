@@ -31,7 +31,7 @@ export function getLatestDescendentTasks (node) {
   const tasks = {}
   const traverseChildren = (currentNode) => {
     // if we aren't at the end of the node tree, continue
-    if (currentNode.children.length > 0) {
+    if (currentNode.children && currentNode.children.length > 0) {
       traverseChildren(currentNode.children[0])
     } else {
       // if we are at the end of the tree, and the end of the tree is of type workflow, fetch the states from the latestStateTasks property
@@ -56,13 +56,14 @@ export function getLatestDescendentTasks (node) {
 export function getLastDescendent (node) {
   let lastDescendent = node
   const traverseChildren = (currentNode) => {
-    if (currentNode.children.length > 0) {
+    if (currentNode.children && currentNode.children.length > 0) {
       traverseChildren(currentNode.children[0])
     } else {
       lastDescendent = currentNode
     }
   }
   traverseChildren(node)
+  console.log(lastDescendent.node, lastDescendent.node.status)
   return lastDescendent
 }
 
@@ -70,7 +71,7 @@ export function createDescendentLabel (node) {
   const labelArr = []
   const traverseChildren = (currentNode) => {
     labelArr.push(currentNode.name || currentNode.id)
-    if (currentNode.children.length > 0) {
+    if (currentNode.children && currentNode.children.length > 0) {
       traverseChildren(currentNode.children[0])
     }
   }
@@ -81,7 +82,7 @@ export function createDescendentLabel (node) {
 export function checkForBranchingLineage (node) {
   let moreThenTwoChildren = false
   const traverseChildren = (currentNode) => {
-    if (moreThenTwoChildren === false && currentNode.children.length > 0) {
+    if (moreThenTwoChildren === false && currentNode.children && currentNode.children.length > 0) {
       if (currentNode.children.length === 1) {
         traverseChildren(currentNode.children[0])
       } else {
