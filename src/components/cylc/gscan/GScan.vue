@@ -15,14 +15,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <template>
-  <div
-    class="c-gscan h-100"
-  >
-    <v-skeleton-loader
-      :loading="isLoading"
-      type="list-item-three-line"
-      class=" d-flex flex-column h-100"
-    >
+  <div class="c-gscan h-100">
+    <v-skeleton-loader :loading="isLoading" type="list-item-three-line" class=" d-flex flex-column h-100">
       <!-- filters -->
       <div class="d-flex flex-row mx-4 mb-2 flex-grow-0">
         <v-text-field
@@ -102,41 +96,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </v-menu>
       </div>
       <!-- data -->
-      <div
-        v-if="!isLoading"
-        class="c-gscan-workflows flex-grow-1"
-      >
-        <tree
-          :filterable="false"
-          :expand-collapse-toggle="false"
-          :workflows="workflows"
-          :stopOn="['workflow']"
-          :autoExpandTypes="['workflow-part', 'workflow']"
-          class="c-gscan-workflow ma-0 pa-0"
-          ref="tree"
-        >
+      <div v-if="!isLoading" class="c-gscan-workflows flex-grow-1">
+        <tree :filterable="false" :expand-collapse-toggle="false" :workflows="workflows" :stopOn="['workflow']" :autoExpandTypes="['workflow-part', 'workflow']" class="c-gscan-workflow ma-0 pa-0" ref="tree">
+          <!-- this overwrites the node slot in the tree-item template, these are ALWAYS inserted where the node slot is regardless of its current value -->
           <template v-slot:node="scope">
-            <workflow-icon
-              class="mr-2"
-              v-if="scope.node.type === 'workflow'"
-              :status="scope.node.node.status"
-              v-cylc-object="scope.node"
-            />
-            <v-list-item
-              :to="workflowLink(scope.node)"
-            >
+
+            <workflow-icon class="mr-2" v-if="scope.node.type === 'workflow' || !checkForBranchingLineage(scope.node)" :status="getLastDescendent(scope.node).node.status" v-cylc-object="getLastDescendent(scope.node)" />
+
+            <v-list-item :to="workflowLink(scope.node)">
               <v-list-item-title>
                 <v-layout align-center align-content-center d-flex flex-nowrap>
-                  <v-flex
-                    v-if="scope.node.type === 'workflow-part'"
-                    class="c-gscan-workflow-name"
-                  >
-                    <span>{{ scope.node.name || scope.node.id }}</span>
+
+                  <v-flex v-if="scope.node.type === 'workflow-part'" class="c-gscan-workflow-name">
+                    <span>{{ checkForBranchingLineage(scope.node) ? scope.node.name || scope.node.id : createDescendentLabel(scope.node) }}</span>
                   </v-flex>
-                  <v-flex
-                    v-else-if="scope.node.type === 'workflow'"
-                    class="c-gscan-workflow-name"
-                  >
+
+                  <v-flex v-else-if="scope.node.type === 'workflow'" class="c-gscan-workflow-name">
                     <v-tooltip top>
                       <template v-slot:activator="{ on }">
                         <span v-on="on">{{ scope.node.name }}</span>
@@ -144,37 +119,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                       <span>{{ scope.node.id }}</span>
                     </v-tooltip>
                   </v-flex>
+
                   <!-- We check the latestStateTasks below as offline workflows won't have a latestStateTasks property -->
-                  <v-flex
-                    v-if="scope.node.type === 'workflow' && scope.node.node.latestStateTasks"
-                    class="text-right c-gscan-workflow-states"
-                  >
+                  <v-flex v-if="(scope.node.type === 'workflow' || !checkForBranchingLineage(scope.node))" class="text-right c-gscan-workflow-states">
                     <!-- task summary tooltips -->
-                    <span
-                      v-for="[state, tasks] in getLatestStateTasks(Object.entries(scope.node.node.latestStateTasks))"
-                      :key="`${scope.node.id}-summary-${state}`"
-                      :class="getTaskStateClasses(scope.node.node, state)"
-                    >
+<!--                    <span v-for="[state, tasks] in getLatestStateTasks(Object.entries(scope.node.node.latestStateTasks))" :key="`${scope.node.id}-summary-${state}`" :class="getTaskStateClasses(scope.node.node, state)">-->
+                    <span v-for="(tasks, state) in getAllDescendentTasks(scope.node)" :key="`${scope.node.id}-summary-${state}`" :class="tasks.length ? '' : 'empty-state'">
                     <v-tooltip color="black" top>
                       <template v-slot:activator="{ on }">
                         <!-- a v-tooltip does not work directly set on Cylc job component, so we use a dummy button to wrap it -->
                         <!-- NB: most of the classes/directives in these button are applied so that the user does not notice it is a button -->
-                        <v-btn
-                          v-on="on"
-                          class="ma-0 pa-0"
-                          min-width="0"
-                          min-height="0"
-                          style="font-size: 120%; width: auto"
-                          :ripple="false"
-                          dark
-                          icon
-                        >
+                        <v-btn v-on="on" class="ma-0 pa-0" min-width="0" min-height="0" style="font-size: 120%; width: auto" :ripple="false" dark icon>
                           <job :status="state" />
                         </v-btn>
                       </template>
                       <!-- tooltip text -->
                       <span>
-                        <span class="grey--text">{{ countTasksInState(scope.node.node, state) }} {{ state }}. Recent {{ state }} tasks:</span>
+                        <span class="grey--text">{{ tasks.length }} {{ state }}. Recent {{ state }} tasks:</span>
                         <br/>
                         <span v-for="(task, index) in tasks.slice(0, maximumTasksDisplayed)" :key="index">
                           {{ task }}<br v-if="index !== tasks.length -1" />
@@ -183,6 +144,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     </v-tooltip>
                   </span>
                   </v-flex>
+
                 </v-layout>
               </v-list-item-title>
             </v-list-item>
@@ -213,6 +175,7 @@ import WorkflowIcon from '@/components/cylc/gscan/WorkflowIcon'
 import { filterHierarchically } from '@/components/cylc/gscan/filters'
 import { GSCAN_DELTAS_SUBSCRIPTION } from '@/graphql/queries'
 import { sortedWorkflowTree } from '@/components/cylc/gscan/sort.js'
+import { checkForBranchingLineage, createDescendentLabel, getLastDescendent, getAllDescendentTasks } from '@/components/cylc/tree/util'
 
 export default {
   name: 'GScan',
@@ -397,6 +360,10 @@ export default {
     }
   },
   methods: {
+    checkForBranchingLineage,
+    createDescendentLabel,
+    getAllDescendentTasks,
+    getLastDescendent,
     filterHierarchically,
 
     /**
@@ -434,42 +401,6 @@ export default {
         return `/workflows/${ node.tokens.workflow }`
       }
       return ''
-    },
-
-    /**
-     * Get number of tasks we have in a given state. The states are retrieved
-     * from `latestStateTasks`, and the number of tasks in each state is from
-     * the `stateTotals`. (`latestStateTasks` includes old tasks).
-     *
-     * @param {WorkflowGraphQLData} workflow - the workflow object retrieved from GraphQL
-     * @param {string} state - a workflow state
-     * @returns {number|*} - the number of tasks in the given state
-     */
-    countTasksInState (workflow, state) {
-      if (Object.hasOwnProperty.call(workflow.stateTotals, state)) {
-        return workflow.stateTotals[state]
-      }
-      return 0
-    },
-
-    getTaskStateClasses (workflow, state) {
-      const tasksInState = this.countTasksInState(workflow, state)
-      return tasksInState === 0 ? ['empty-state'] : []
-    },
-
-    // TODO: temporary filter, remove after b0 - https://github.com/cylc/cylc-ui/pull/617#issuecomment-805343847
-    getLatestStateTasks (latestStateTasks) {
-      // Values found in: https://github.com/cylc/cylc-flow/blob/9c542f9f3082d3c3d9839cf4330c41cfb2738ba1/cylc/flow/data_store_mgr.py#L143-L149
-      const validValues = [
-        TaskState.SUBMITTED.name,
-        TaskState.SUBMIT_FAILED.name,
-        TaskState.RUNNING.name,
-        TaskState.SUCCEEDED.name,
-        TaskState.FAILED.name
-      ]
-      return latestStateTasks.filter(entry => {
-        return validValues.includes(entry[0])
-      })
     }
   }
 }

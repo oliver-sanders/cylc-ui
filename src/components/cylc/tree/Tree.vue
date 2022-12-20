@@ -16,59 +16,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <template>
-  <v-container
-    fluid
-    class="c-table ma-0 pa-2 h-100 flex-column d-flex"
-  >
+  <v-container fluid class="c-table ma-0 pa-2 h-100 flex-column d-flex">
     <!-- Toolbar -->
-    <v-row
-        class="d-flex flex-wrap table-option-bar no-gutters flex-grow-0"
-    >
+    <v-row class="d-flex flex-wrap table-option-bar no-gutters flex-grow-0">
       <!-- Filters -->
-      <v-col
-        v-if="filterable"
-        class="grow"
-      >
-        <v-row
-          no-gutters
-        >
-          <v-col
-            cols="12"
-            md="6"
-            class="pr-md-2 mb-2 mb-md-0"
-          >
-            <v-text-field
-              id="c-tree-filter-task-name"
-              clearable
-              dense
-              flat
-              hide-details
-              outlined
-              placeholder="Filter by task name"
-              v-model="tasksFilter.name"
-              @keyup="filterTasks"
-              @click:clear="clearInput"
-              ref="filterNameInput"
-            ></v-text-field>
+      <v-col v-if="filterable" class="grow">
+        <v-row no-gutters>
+          <v-col cols="12" md="6" class="pr-md-2 mb-2 mb-md-0">
+            <v-text-field id="c-tree-filter-task-name" clearable dense flat hide-details outlined placeholder="Filter by task name" v-model="tasksFilter.name" @keyup="filterTasks" @click:clear="clearInput" ref="filterNameInput"></v-text-field>
           </v-col>
-          <v-col
-            cols="12"
-            md="6"
-            class="mb-2 mb-md-0"
-          >
-            <v-select
-              id="c-tree-filter-task-states"
-              :items="taskStates"
-              clearable
-              dense
-              flat
-              hide-details
-              multiple
-              outlined
-              placeholder="Filter by task state"
-              v-model="tasksFilter.states"
-              @change="filterTasks"
-            >
+          <v-col cols="12" md="6" class="mb-2 mb-md-0">
+            <v-select id="c-tree-filter-task-states" :items="taskStates" clearable dense flat hide-details multiple outlined placeholder="Filter by task state" v-model="tasksFilter.states" @change="filterTasks">
               <template v-slot:item="slotProps">
                 <Task :task="{ state: slotProps.item.value }" />
                 <span class="ml-2">{{ slotProps.item.value }}</span>
@@ -77,10 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <div class="mr-2" v-if="slotProps.index >= 0 && slotProps.index < maximumTasks">
                   <Task :task="{ state: slotProps.item.value }" />
                 </div>
-                <span
-                  v-if="slotProps.index === maximumTasks"
-                  class="grey--text caption"
-                >
+                <span v-if="slotProps.index === maximumTasks" class="grey--text caption">
             (+{{ tasksFilter.states.length - maximumTasks }})
           </span>
               </template>
@@ -88,21 +43,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
           </v-col>
         </v-row>
       </v-col>
-      <!-- Expand, collapse all -->
-      <v-col
-        v-if="expandCollapseToggle"
-        class="shrink"
-      >
-        <div
-          class="d-flex flex-nowrap"
-        >
+
+      <!-- Expand, collapse all, not shown by default on GScan -->
+      <v-col v-if="expandCollapseToggle" class="shrink">
+        <div class="d-flex flex-nowrap">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <v-btn
-                v-on="on"
-                @click="expandAll((treeitem) => !['task', 'job', 'job-details'].includes(treeitem.node.type))"
-                icon
-              >
+              <v-btn v-on="on" @click="expandAll((treeitem) => !['task', 'job', 'job-details'].includes(treeitem.node.type))" icon>
                 <v-icon>{{ svgPaths.expandIcon }}</v-icon>
               </v-btn>
             </template>
@@ -110,11 +57,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
           </v-tooltip>
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <v-btn
-                v-on="on"
-                @click="collapseAll()"
-                icon
-              >
+              <v-btn v-on="on" @click="collapseAll()" icon>
                 <v-icon>{{ svgPaths.collapseIcon }}</v-icon>
               </v-btn>
             </template>
@@ -123,18 +66,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </div>
       </v-col>
     </v-row>
-    <v-row
-      no-gutters
-      class="flex-grow-1 position-relative"
-      >
-      <v-col
-        cols="12"
-        class="mh-100 position-relative"
-      >
-        <v-container
-          fluid
-          class="ma-0 pa-0 w-100 h-100 left-0 top-0 position-absolute pt-2"
-        >
+
+    <!-- The actual rendered list  -->
+    <v-row no-gutters class="flex-grow-1 position-relative">
+      <v-col cols="12" class="mh-100 position-relative">
+        <v-container fluid class="ma-0 pa-0 w-100 h-100 left-0 top-0 position-absolute pt-2">
           <tree-item
             v-for="child of rootChildren"
             :key="child.id"
@@ -142,6 +78,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             :stopOn="stopOn"
             :hoverable="hoverable"
             :autoExpandTypes="autoExpandTypes"
+            :singleChildDescendancy="shouldExpand(child)"
             :cyclePointsOrderDesc="cyclePointsOrderDesc"
             v-on:tree-item-created="onTreeItemCreated"
             v-on:tree-item-destroyed="onTreeItemDestroyed"
@@ -292,6 +229,21 @@ export default {
     }
   },
   methods: {
+    // this checks if any children have more then one sub children, in which case we should initially expand that tree item
+    shouldExpand (node) {
+      let expand = false
+      const recursiveChildrenCheck = (checkingNode) => {
+        if (expand === false && checkingNode.children.length > 0) {
+          if (checkingNode.children.length === 1) {
+            recursiveChildrenCheck(checkingNode.children[0])
+          } else {
+            expand = true
+          }
+        }
+      }
+      recursiveChildrenCheck(node)
+      return expand
+    },
     filterByTaskName () {
       return this.activeFilters.name !== undefined &&
           this.activeFilters.name !== null &&

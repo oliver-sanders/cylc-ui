@@ -17,21 +17,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 <template>
   <div class="treeitem" v-show="filtered">
-    <v-flex
-      class="node d-flex align-center"
-      :class="nodeClass"
-      :style="nodeStyle"
-    >
+    <v-flex class="node d-flex align-center" :class="nodeClass" :style="nodeStyle">
+
       <!-- the node's left icon; used for expand/collapse -->
-      <v-icon
-        aria-label="Expand/collapse"
-        role="img"
-        aria-hidden="false"
-        class="node-expand-collapse-button"
-        v-if="shouldRenderExpandCollapseBtn"
-        @click="toggleExpandCollapse"
-        :style="expandCollapseBtnStyle"
-      >{{ icons.mdiChevronRight }}</v-icon>
+      <v-icon aria-label="Expand/collapse" role="img" aria-hidden="false" class="node-expand-collapse-button" v-if="shouldRenderExpandCollapseBtn" @click="toggleExpandCollapse" :style="expandCollapseBtnStyle">{{ icons.mdiChevronRight }}</v-icon>
+
       <!-- the node value -->
       <!-- TODO: revisit these values that can be replaced by constants later (and in other components too). -->
       <slot name="cyclepoint" v-if="node.type === 'cycle'">
@@ -40,61 +30,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             at present so we must use the root family node for the task icon.
             We don't use this for the v-cylc-object as that would set the node
             type to family. -->
-          <Task
-            v-cylc-object="node"
-            v-if="node.familyTree"
-            :key="node.id"
-            :task="node.familyTree[0].node"
-          />
+          <Task v-cylc-object="node" v-if="node.familyTree" :key="node.id" :task="node.familyTree[0].node"/>
           <span class="mx-1">{{ node.name }}</span>
         </div>
       </slot>
       <slot name="family-proxy" v-else-if="node.type === 'family'">
         <div :class="getNodeDataClass()" @click="nodeClicked">
-          <Task
-            v-cylc-object="node"
-            :key="node.id"
-            :task="node.node"
-          />
+          <Task v-cylc-object="node" :key="node.id" :task="node.node"/>
           <span class="mx-1">{{ node.name }}</span>
         </div>
       </slot>
       <slot name="task-proxy" v-else-if="node.type === 'task'">
         <div :class="getNodeDataClass()" @click="nodeClicked">
           <!-- Task summary -->
-          <Task
-            v-cylc-object="node"
-            :key="node.id"
-            :task="node.node"
-            :startTime="(latestJob(node) || {}).startedTime"
-          />
+          <Task v-cylc-object="node" :key="node.id" :task="node.node" :startTime="(latestJob(node) || {}).startedTime"/>
           <div v-if="!isExpanded" class="node-summary">
             <!-- most recent job summary -->
-            <Job
-              v-for="(job, index) in node.children.slice(0, 1)"
-              v-cylc-object="job"
-              :key="`${job.id}-summary-${index}`"
-              :status="job.node.state"
-              :previous-state="node.children.length > 1 ? node.children[1].node.state : ''"
-              style="margin-left: 0.25em;"
-            />
+            <Job v-for="(job, index) in node.children.slice(0, 1)" v-cylc-object="job" :key="`${job.id}-summary-${index}`" :status="job.node.state" :previous-state="node.children.length > 1 ? node.children[1].node.state : ''" style="margin-left: 0.25em;"/>
           </div>
           <span class="mx-1">{{ node.name }}</span>
         </div>
       </slot>
       <slot name="job" v-else-if="node.type === 'job'">
         <div :class="getNodeDataClass()" @click="nodeClicked">
-          <Job
-            v-cylc-object="node"
-            :key="node.id"
-            :status="node.node.state"
-          />
+          <Job v-cylc-object="node" :key="node.id" :status="node.node.state"/>
           <span class="mx-1">#{{ node.node.submitNum }}</span>
           <span class="grey--text">{{ node.node.platform }}</span>
-          <span
-            class="grey--text d-flex flex-nowrap flex-row align-center"
-            v-if="jobMessageOutputs && jobMessageOutputs.length > 0"
-          >
+          <span class="grey--text d-flex flex-nowrap flex-row align-center" v-if="jobMessageOutputs && jobMessageOutputs.length > 0">
             <!--
               We had a tricky bug in #530 due to the :key here. In summary, the list
               that is backing this component changes. It contains zero or more entries,
@@ -109,32 +71,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
               prefix).
               @see https://github.com/cylc/cylc-ui/pull/530#issuecomment-781076619
             -->
-            <v-tooltip
-              v-for="(customOutput, index) of [...jobMessageOutputs].slice(0, 5)"
-              :key="`output-chip-${index}`"
-              bottom
-            >
+            <v-tooltip v-for="(customOutput, index) of [...jobMessageOutputs].slice(0, 5)" :key="`output-chip-${index}`" bottom>
               <template v-slot:activator="{ on, attrs }">
-                <v-chip
-                  v-bind="attrs"
-                  v-on="on"
-                  :color="customOutput.isMessage ? 'light-grey' : 'grey'"
-                  :text-color="customOutput.isMessage ? 'black' : 'white'"
-                  class="ml-2 message-output"
-                  small
-                >{{ customOutput.label }}</v-chip>
+                <v-chip v-bind="attrs" v-on="on" :color="customOutput.isMessage ? 'light-grey' : 'grey'" :text-color="customOutput.isMessage ? 'black' : 'white'" class="ml-2 message-output" small>{{ customOutput.label }}</v-chip>
               </template>
               <span>{{ customOutput.message }}</span>
             </v-tooltip>
-            <v-chip
-              v-if="jobMessageOutputs.length > 5"
-              color="grey"
-              text-color="grey lighten-5"
-              class="ml-2"
-              small
-              link
-              @click="toggleExpandCollapse"
-            >+{{ jobMessageOutputs.length - 5 }}</v-chip>
+            <v-chip v-if="jobMessageOutputs.length > 5" color="grey" text-color="grey lighten-5" class="ml-2" small link @click="toggleExpandCollapse">+{{ jobMessageOutputs.length - 5 }}</v-chip>
           </span>
         </div>
       </slot>
@@ -142,11 +85,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <div class="leaf job-details">
           <div class="arrow-up" :style="leafTriangleStyle"></div>
           <div class="leaf-data font-weight-light py-4 pl-2">
-            <div
-              v-for="item in leafProperties"
-              :key="item.property"
-              class="leaf-entry"
-            >
+            <div v-for="item in leafProperties" :key="item.property" class="leaf-entry">
               <span class="px-4 leaf-entry-title">{{ item.title }}</span>
               <span class="grey--text leaf-entry-value">{{ node.node[item.property] }}</span>
             </div>
@@ -154,15 +93,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <div class="leaf-entry">
               <span class="px-4 leaf-entry-title grey--text text--darken-1">outputs</span>
             </div>
-            <div
-              v-if="jobMessageOutputs && jobMessageOutputs.length > 0"
-              class="leaf-outputs-entry"
-            >
-              <div
-                v-for="customOutput of jobMessageOutputs"
-                :key="customOutput.label"
-                class="leaf-entry output"
-              >
+            <div v-if="jobMessageOutputs && jobMessageOutputs.length > 0" class="leaf-outputs-entry">
+              <div v-for="customOutput of jobMessageOutputs" :key="customOutput.label" class="leaf-entry output">
                 <span class="px-4 leaf-entry-title">{{ customOutput.label }}</span>
                 <span class="grey--text leaf-entry-value">{{ customOutput.message }}</span>
               </div>
@@ -173,25 +105,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
           </div>
         </div>
       </slot>
-      <slot
-        v-bind:node="node"
-        name="node"
-        v-else
-      >
+      <slot v-bind:node="node" name="node" v-else>
         <div :class="getNodeDataClass()">
-          <span
-            v-if="node && node.node"
-            @click="nodeClicked"
-            :key="node.id"
-            class="mx-1">{{ node.name }}</span>
+          <span v-if="node && node.node" @click="nodeClicked" :key="node.id" class="mx-1">{{ node.name }}</span>
         </div>
       </slot>
       <slot></slot>
     </v-flex>
-    <span
-      v-show="isExpanded"
-      v-if="!stopOn.includes(node.type)"
-    >
+    <span v-show="isExpanded" v-if="!stopOn.includes(node.type)">
       <!-- component recursion -->
       <TreeItem
         v-if="node.type === 'job'"
@@ -252,7 +173,7 @@ import {
   latestJob,
   jobMessageOutputs
 } from '@/utils/tasks'
-import { getNodeChildren } from '@/components/cylc/tree/util'
+import { getNodeChildren, checkForBranchingLineage } from '@/components/cylc/tree/util'
 
 /**
  * Offset used to move nodes to the right or left, to represent the nodes hierarchy.
@@ -292,6 +213,11 @@ export default {
       type: Array,
       required: false,
       default: () => []
+    },
+    singleChildDescendancy: {
+      type: Boolean,
+      required: false,
+      default: () => false
     }
   },
   data () {
@@ -331,7 +257,23 @@ export default {
       isExpanded: false
     }
   },
+  watch: {
+    node: {
+      deep: true,
+      handler: function () {
+        this.$nextTick(() => {
+          // apply auto-expand rules when a tree-item is updated, take into account singleChildDescendancy preference
+          // this.isExpanded = this.hasBranchingLineage && this.autoExpandTypes.includes(this.node.type)
+          this.isExpanded = this.autoExpandTypes.includes(this.node.type)
+          this.emitExpandCollapseEvent(this.isExpanded)
+        })
+      }
+    }
+  },
   computed: {
+    hasBranchingLineage () {
+      return checkForBranchingLineage(this.node)
+    },
     hasChildren () {
       if (this.stopOn.includes(this.node.type)) {
         // don't show children if the tree has been configured to stop at
@@ -403,9 +345,9 @@ export default {
     this.$emit('tree-item-destroyed', this)
   },
   beforeMount () {
-    // apply auto-expand rules when a treeitem is created
-    this.isExpanded = this.autoExpandTypes.includes(this.node.type)
-    this.emitExpandCollapseEvent(this.isExpanded)
+    // apply auto-expand rules when a tree-item is created, take into account singleChildDescendancy preference, although this may turn up after the first render (see above in watch function)
+    // this.isExpanded = this.singleChildDescendancy && this.autoExpandTypes.includes(this.node.type)
+    // this.emitExpandCollapseEvent(this.isExpanded)
   },
   methods: {
     toggleExpandCollapse () {
