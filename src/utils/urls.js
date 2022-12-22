@@ -40,11 +40,11 @@ function normalize(url) {
  *
  * @private
  * @param {boolean} websockets - whether the URL will be used for websockets or
- * - not
+ * not
  * @param {boolean} baseOnly - whether to use only the base URL or not when
- * - creating the new URL
+ * creating the new URL
  * @returns {string} - the application base URL, containing protocol, hostname,
- * - port, and pathname
+ * port, and pathname
  */
 function getBaseUrl(websockets = false, baseOnly = false) {
   const protocol = websockets
@@ -68,9 +68,9 @@ function getBaseUrl(websockets = false, baseOnly = false) {
  *
  * @param {string} path - path to be used when creating a new URL (e.g. /users)
  * @param {boolean} websockets - whether the URL will be used for websockets or
- * - not
+ * not
  * @param {boolean} baseOnly - whether to use only the base URL or not when
- * - creating the new URL
+ * creating the new URL
  * @returns {string} - the new URL, preceded by the base URL (e.g. https://hub:8080/users/cylc/users)
  */
 function createUrl(path, websockets = false, baseOnly = false) {

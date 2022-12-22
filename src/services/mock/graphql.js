@@ -51,7 +51,7 @@ function getOperationName(query) {
  * Get the response for a given GraphQL query operation name.
  *
  * @param {string} operationName - GraphQL query operation name (e.g.
- * - GScanQuery, WorkflowTableQuery, etc)
+ * GScanQuery, WorkflowTableQuery, etc)
  * @returns {*} GraphQL response
  */
 function getGraphQLQueryResponse(operationName) {

@@ -27,7 +27,7 @@ describe('Mutations component', () => {
 
   /**
    * @param {string} nodeName - the tree node name, to search for and open the
-   * - mutations form
+   * mutations form
    */
   const openMutationsForm = (nodeName) => {
     cy.get('[data-cy=tree-view]')

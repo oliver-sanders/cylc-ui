@@ -29,7 +29,7 @@ export function filterByName(workflow, name) {
 /**
  * @private
  * @param stateTotals {Object} - object with the keys being states, and values
- * - the count
+ * the count
  * @return {Array<String>}
  */
 function getWorkflowStates(stateTotals) {
@@ -105,7 +105,7 @@ function filterWorkflow(workflow, name, workflowStates, taskStates) {
  * @param {Array<String>} workflowStates
  * @param {Array<String>} taskStates
  * @returns {Array<WorkflowGScanNode|WorkflowNamePartGScanNode>} - filtered
- * - workflows
+ * workflows
  * @see https://stackoverflow.com/questions/45289854/how-to-effectively-filter-tree-view-retaining-its-existing-structure
  */
 export function filterHierarchically(

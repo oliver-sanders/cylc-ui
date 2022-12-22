@@ -89,9 +89,9 @@ import { IntrospectionInputType } from 'graphql'
  * @property {string=} _shortDescription
  * @property {string=} _help
  * @property {string=} _appliesTo - type of cylc object this mutation applies
- * - to (if cannot determine from args)
+ * to (if cannot determine from args)
  * @property {boolean=} _requiresInfo - whether this mutation needs more info
- * - than the cylc object it is operating on (if cannot determine from args)
+ * than the cylc object it is operating on (if cannot determine from args)
  */
 
 /**
@@ -368,11 +368,11 @@ export function findByName(objs, name) {
  * them all out.
  *
  * @param {IntrospectionInputType} type - GraphQL type that we are looking for
- * - fields in.
+ * fields in.
  * @param {?Field[]} fields - Subset of fields on the above type to extract. If
- * - nullish, extract all fields (if any).
+ * nullish, extract all fields (if any).
  * @param {IntrospectionInputType[]} types - Full list of GraphQL types from
- * - introspection query.
+ * introspection query.
  * @return {?Field[]}
  */
 export function extractFields(type, fields, types) {
@@ -408,7 +408,7 @@ export function extractFields(type, fields, types) {
  *
  * @param {Mutation} mutations - Mutations as returned by introspection query.
  * @param {IntrospectionInputType[]} types - Types as returned by introspection
- * - query.
+ * query.
  */
 export function processMutations(mutations, types) {
   for (const mutation of mutations) {
@@ -463,7 +463,7 @@ export function getMutationExtendedDesc(text) {
  *
  * @param {Mutation} mutation - One Mutation as returned by introspection query.
  * @param {IntrospectionInputType[]} types - Types as returned by introspection
- * - query.
+ * query.
  */
 export function processArguments(mutation, types) {
   let pointer = null
@@ -650,7 +650,7 @@ export function getBaseType(type) {
  * @param {GQLType} type - A type field as returned by an introspection query.
  * (an object of the form {name: x, kind: y, ofType: z}).
  * @param {(IntrospectionInputType[])=} types - An array of all types present
- * - in the schema.
+ * in the schema.
  * (optional: used to resolve InputObjectType fields).
  *
  * @returns {Object|Object[]|null}
@@ -708,7 +708,7 @@ export function argumentSignature(arg) {
 /** Construct a mutation string from a mutation introspection.
  *
  * @param {Mutation} mutation - A mutation as returned by an introspection
- * - query.
+ * query.
  *
  * @returns {string} A mutation string for a client to send to the server.
  */

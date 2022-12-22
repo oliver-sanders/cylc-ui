@@ -169,9 +169,9 @@ class WorkflowService {
    * Return a GraphQL query for a type, containing the given fields.
    *
    * @param {string} queryName - Name of the GraphQL query available in the
-   * - schema.
+   * schema.
    * @param {string[]} argNames - Names of args to supply in the query (note:
-   * - the variables (i.e. values of the args) are supplied elsewhere).
+   * the variables (i.e. values of the args) are supplied elsewhere).
    * @param {Field[]} fields - Fields to include in the query.
    * @return {Promise<Query>}
    */
@@ -350,7 +350,7 @@ class WorkflowService {
    * used here to create the observer and the subscription.
    *
    * @param {DocumentNode} query - an already parsed GraphQL query (i.e. not a
-   * - `string`)
+   * `string`)
    * @param {Object} variables
    * @param {SubscriptionOptions} subscriptionOptions - { next(), error() }
    * @returns {Subscription}

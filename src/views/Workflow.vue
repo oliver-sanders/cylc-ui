@@ -128,7 +128,7 @@ export default {
      * Add a new view widget.
      *
      * @type {String} viewName - the name of the view to be added (Vue
-     * - component name).
+     * component name).
      */
     addView(viewName) {
       const view = this.views.filter((v) => v.name === viewName).slice(0)[0]
@@ -169,7 +169,7 @@ export default {
      * @param {{
      *   id: string
      * }} event UI event containing the widget ID (string value, needs to be
-     * - parsed)
+     * parsed)
      */
     onWidgetDeletedEvent(event) {
       Vue.delete(this.widgets, event.id)

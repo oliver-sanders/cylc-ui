@@ -47,7 +47,7 @@ export function createGraphQLUrls() {
 /**
  * Get request headers for use with UI Server requests.
  *
- * - Adds X-XSRFToken header for hubless token based auth.
+ * Adds X-XSRFToken header for hubless token based auth.
  */
 export function getCylcHeaders() {
   const xsrfToken = document.cookie.match('\\b_xsrf=([^;]*)\\b')
@@ -68,7 +68,7 @@ export function getCylcHeaders() {
  *   reconnect: boolean,
  *   lazy: boolean
  * }} options - SubscriptionClient options (only two main options added here,
- * - see their doc for more)
+ * see their doc for more)
  * @param {*} wsImpl
  * @return {SubscriptionClient} a subscription client
  */

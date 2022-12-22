@@ -33,7 +33,7 @@ export default class LuminoWidget extends Widget {
    * @param id {string} unique ID of the widget
    * @param name {string} text displayed in the widget tab
    * @param closable {boolean} flag that controls whether the tab can be closed
-   * - or not
+   * or not
    */
   constructor(id, name, closable = true) {
     super({ node: LuminoWidget.createNode(id) })

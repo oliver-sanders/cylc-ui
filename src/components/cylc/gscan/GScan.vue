@@ -442,7 +442,7 @@ export default {
      *   }
      * ]} items - filter items
      * @returns {boolean} - `true` iff all the items have been selected.
-     * - `false` otherwise
+     * `false` otherwise
      */
     allItemsSelected(items) {
       return items.every((item) => item.model === true)
@@ -477,8 +477,8 @@ export default {
      * from `latestStateTasks`, and the number of tasks in each state is from
      * the `stateTotals`. (`latestStateTasks` includes old tasks).
      *
-     * @param {WorkflowGraphQLData} workflow
-     * - the workflow object retrieved from GraphQL
+     * @param {WorkflowGraphQLData} workflow - the workflow object retrieved
+     * from GraphQL
      * @param {string} state - a workflow state
      * @returns {number|*} - the number of tasks in the given state
      */

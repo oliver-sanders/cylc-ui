@@ -66,11 +66,11 @@ export const DEFAULT_COMPARATOR = (left, right) => {
  * @param {Object[]} array - list of string values, or of objects with string
  * values
  * @param {Object} value - a value to be inserted in the list, or an object
- * - wrapping the value (see iteratee)
+ * wrapping the value (see iteratee)
  * @param {SortedIndexByIteratee=} iteratee - an optional function used to
- * - return the value of the element of the list}
+ * return the value of the element of the list}
  * @param {SortedIndexByComparator=} comparator - function used to compare
- * - the newValue with otherValues in the list
+ * the newValue with otherValues in the list
  * @return {number} - sorted index
  */
 export function sortedIndexBy(array, value, iteratee, options = {}) {

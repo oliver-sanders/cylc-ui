@@ -37,7 +37,7 @@ import { VIcon, VTooltip } from 'vuetify/lib/components'
  * Taken from https://stackoverflow.com/a/67412844/3217306
  *
  * @param fn - Function meant for the value of slot in the data-object's
- * - "scopedSlots"
+ * "scopedSlots"
  */
 function vuetifyScopedSlotShim(fn) {
   fn.proxy = true

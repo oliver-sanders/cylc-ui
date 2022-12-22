@@ -22,7 +22,7 @@ const graphql = require('./graphql')
  *
  * @param {string} id - Subscription ID
  * @param {string} type - Message type (e.g. data, connection_init, etc, see
- * - GraphQL spec)
+ * GraphQL spec)
  * @param {object} [data] - Response data, optional
  * @returns {{id, type, payload}}
  */

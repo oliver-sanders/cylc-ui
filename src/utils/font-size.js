@@ -30,7 +30,7 @@ const INITIAL_FONT_SIZE = styles.fontRootSize
  * $font-root-size, set by default to 16px).
  *
  * @param {string} [initialFontSize] initial font size, defaults to the Vuetify
- * - value
+ * value
  */
 function resetFontSize(initialFontSize = INITIAL_FONT_SIZE) {
   localStorage.fontSize = initialFontSize
@@ -81,7 +81,7 @@ function getCurrentFontSize() {
  * @param {boolean} increase true means increase, false decrease
  * @param {number} clicks number of times a button was clicked
  * @param {number} [initialFontSize] initial font size, defaults to the Vuetify
- * - value
+ * value
  * @returns {number}
  */
 function expectedFontSize(
