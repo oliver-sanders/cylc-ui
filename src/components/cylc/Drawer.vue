@@ -84,7 +84,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // eslint-disable-next-line no-unused-vars
 import Header from '@/components/cylc/Header'
 import { mapState } from 'vuex'
-import GScan from '@/components/cylc/gscan/GScan'
+import GScan from '@/views/GScan'
 import { mdiHome, mdiGraphql } from '@mdi/js'
 import { version } from '@/../package.json'
 

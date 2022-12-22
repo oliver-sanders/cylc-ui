@@ -161,19 +161,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { mdiFilter } from '@mdi/js'
 import uniq from 'lodash/uniq'
-import subscriptionComponentMixin from '@/mixins/subscriptionComponent'
 import TaskState from '@/model/TaskState.model'
-import SubscriptionQuery from '@/model/SubscriptionQuery.model'
 import { WorkflowState } from '@/model/WorkflowState.model'
 import Job from '@/components/cylc/Job'
 import Tree from '@/components/cylc/tree/Tree'
 import WorkflowIcon from '@/components/cylc/gscan/WorkflowIcon'
 import { filterHierarchically } from '@/components/cylc/gscan/filters'
-import { GSCAN_DELTAS_SUBSCRIPTION } from '@/graphql/queries'
-import { sortedWorkflowTree } from '@/components/cylc/gscan/sort.js'
 import { checkForBranchingLineage, createDescendentLabel, getLastDescendent, getLatestDescendentTasks } from '@/components/cylc/tree/util'
 
 export default {
@@ -183,17 +178,18 @@ export default {
     Tree,
     WorkflowIcon
   },
-  mixins: [
-    subscriptionComponentMixin
-  ],
+  props: {
+    workflows: {
+      type: Array,
+      required: true
+    },
+    isLoading: {
+      type: Boolean,
+      required: true
+    }
+  },
   data () {
     return {
-      query: new SubscriptionQuery(
-        GSCAN_DELTAS_SUBSCRIPTION,
-        {},
-        'root',
-        []
-      ),
       maximumTasksDisplayed: 5,
       svgPaths: {
         filter: mdiFilter
@@ -275,14 +271,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('workflows', ['cylcTree']),
-    workflows () {
-      if (!this.cylcTree?.children.length) {
-        // no user in the data store (i.e. data loading)
-        return []
-      }
-      return sortedWorkflowTree(this.cylcTree)
-    },
     /**
      * @return {Array<String>}
      */
@@ -404,3 +392,45 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+@import '~vuetify/src/styles/styles';
+
+@mixin hover {
+  &:hover {
+    background-color: map-get($grey, 'lighten-2');
+  }
+}
+
+.c-gscan {
+  .v-skeleton-loader > div:first-child {
+    background: inherit;
+  }
+  .c-gscan-workflows {
+    .c-gscan-workflow {
+      .c-workflow-stopped {
+        opacity: 0.5;
+      }
+      .c-gscan-workflow-name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .c-gscan-workflow-states {
+        span.empty-state {
+          opacity: 0.2;
+        }
+      }
+
+      .treeitem {
+        .node {
+          .v-list-item {
+            padding: 0 8px;
+            @include hover;
+          }
+        }
+      }
+    }
+  }
+}
+</style>

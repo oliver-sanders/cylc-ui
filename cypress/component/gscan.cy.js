@@ -15,42 +15,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import '~vuetify/src/styles/styles';
+import GScanComponent from '@/components/cylc/gscan/GScan'
+import { WorkflowState } from '@/model/WorkflowState.model'
 
-@mixin hover {
-  &:hover {
-    background-color: map-get($grey, 'lighten-2');
+const WORKFLOWS = [
+  {
+    id: '~u/a',
+    name: 'a',
+    type: 'workflow-part',
+    tokens: { user: 'u', workflow: 'a' },
+    node: {},
+    children: [
+      {
+        id: '~u/a/a1',
+        name: 'a1',
+        type: 'workflow',
+        tokens: { user: 'u', workflow: 'a/a1' },
+        node: { state: WorkflowState.RUNNING.name, latestStateTasks: { submitted: [] } },
+        children: []
+      }
+    ]
   }
-}
+]
 
-.c-gscan {
-  .v-skeleton-loader > div:first-child {
-    background: inherit;
-  }
-  .c-gscan-workflows {
-    .c-gscan-workflow {
-      .c-workflow-stopped {
-        opacity: 0.5;
-      }
-      .c-gscan-workflow-name {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      .c-gscan-workflow-states {
-        span.empty-state {
-          opacity: 0.2;
-        }
-      }
-
-      .treeitem {
-        .node {
-          .v-list-item {
-            padding: 0 8px;
-            @include hover;
-          }
-        }
-      }
-    }
-  }
-}
+describe('GScan component', () => {
+  it('loads', () => {
+    cy.vmount(
+      GScanComponent,
+      { propsData: { workflows: WORKFLOWS, isLoading: false } }
+    )
+  })
+})
