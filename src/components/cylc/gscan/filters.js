@@ -62,7 +62,7 @@ export function filterByState(workflow, workflowStates, taskStates) {
   // task states
   if (taskStates.length > 0) {
     const intersection = getWorkflowStates(workflow.node.stateTotals).filter(
-      (item) => taskStates.includes(item),
+      (item) => taskStates.includes(item)
     )
     return intersection.length !== 0
   }
@@ -112,7 +112,7 @@ export function filterHierarchically(
   workflows,
   name,
   workflowStates,
-  taskStates,
+  taskStates
 ) {
   const filterChildren = (result, workflowNode) => {
     if (workflowNode.type === 'workflow') {

@@ -115,7 +115,7 @@ class WorkflowService {
     return await mutate(
       mutation,
       getMutationArgsFromTokens(mutation, tokenise(id)),
-      this.apolloClient,
+      this.apolloClient
     )
   }
 
@@ -201,7 +201,7 @@ class WorkflowService {
     // any subsequent queries
     if (!subscription) {
       subscription = this.subscriptions[queryName] = new Subscription(
-        componentOrView.query,
+        componentOrView.query
       )
     }
     return subscription
@@ -237,7 +237,7 @@ class WorkflowService {
             console.warn(...error)
             subscription.handleViewState(
               ViewState.ERROR,
-              error('Error presetting view state'),
+              error('Error presetting view state')
             )
           }
         }
@@ -254,7 +254,7 @@ class WorkflowService {
     const pendingSubscriptions = Object.values(this.subscriptions).filter(
       (subscription) => {
         return subscription.observable === null || subscription.reload
-      },
+      }
     )
     pendingSubscriptions.forEach((subscription) =>
       this.startSubscription(subscription))
@@ -270,7 +270,7 @@ class WorkflowService {
       // eslint-disable-next-line no-console
       console.debug(
         `Starting subscription ${subscription.query.name}`,
-        subscription,
+        subscription
       )
     }
     subscription.handleViewState(ViewState.LOADING, null)
@@ -281,7 +281,7 @@ class WorkflowService {
         // eslint-disable-next-line no-console
         console.debug(
           `Subscription for query [${subscription.query.name}]`
-          + 'already running. Stopping it...',
+          + 'already running. Stopping it...'
         )
       }
       this.stopSubscription(subscription, true)
@@ -333,7 +333,7 @@ class WorkflowService {
           error: function error(err) {
             subscription.handleViewState(ViewState.ERROR, err)
           },
-        },
+        }
       )
       this.subscriptions[subscription.query.name] = subscription
       // All done!
@@ -389,7 +389,7 @@ class WorkflowService {
     if (!subscription) {
       // eslint-disable-next-line no-console
       console.warn(
-        `Could not unsubscribe [${componentOrView.query.name}]: Not Found`,
+        `Could not unsubscribe [${componentOrView.query.name}]: Not Found`
       )
       return
     }
@@ -439,7 +439,7 @@ class WorkflowService {
       // stopped.
       store.commit(
         'workflows/REMOVE_CHILDREN',
-        subscription.query.variables.workflowId,
+        subscription.query.variables.workflowId
       )
     }
     delete this.subscriptions[subscription.query.name]
@@ -478,7 +478,7 @@ class WorkflowService {
         !isEqual(subscriber.query.variables, baseSubscriber.query.variables)
       ) {
         throw new Error(
-          'Error recomputing subscription: Query variables do not match.',
+          'Error recomputing subscription: Query variables do not match.'
         )
       }
       finalQuery = mergeQueries(finalQuery, subscriber.query.query)

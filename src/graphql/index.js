@@ -78,7 +78,7 @@ export function createSubscriptionClient(wsUrl, options = {}, wsImpl = null) {
       reconnect: true,
       lazy: false,
     },
-    options,
+    options
   )
   const subscriptionClient = new SubscriptionClient(wsUrl, opts, wsImpl)
   // these are the available hooks in the subscription client lifecycle
@@ -148,7 +148,7 @@ export function createApolloClient(httpUrl, subscriptionClient) {
       )
     },
     wsLink,
-    httpLink,
+    httpLink
   )
 
   const wsAuthLink = setContext((_, { headers }) => {

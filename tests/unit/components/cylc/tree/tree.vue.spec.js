@@ -413,7 +413,7 @@ describe('Tree component', () => {
         expect(
           [...Object.values(treeItemCache)].filter((item) => item.isExpanded)
             .length,
-          `Failed case: ${JSON.stringify(test.items)}`,
+          `Failed case: ${JSON.stringify(test.items)}`
         ).to.equal(test.expectedExpandedItems)
       })
     })
@@ -488,7 +488,7 @@ describe('Tree component', () => {
         expect(
           [...Object.values(treeItemCache)].filter((item) => !item.isExpanded)
             .length,
-          `Failed case: ${JSON.stringify(test.items)}`,
+          `Failed case: ${JSON.stringify(test.items)}`
         ).to.equal(test.expectedCollapsedItems)
       })
     })

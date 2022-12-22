@@ -74,7 +74,7 @@ export function sortedWorkflowTree(cylcTree) {
     tree.splice(
       sortedIndexBy(tree, workflowTree, (n) => gscanWorkflowCompValue(n)),
       0,
-      workflowTree,
+      workflowTree
     )
   }
   return tree

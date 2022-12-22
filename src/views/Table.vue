@@ -109,7 +109,7 @@ export default {
         // we can avoid callback merging errors like the one documented line 350
         // in the workflow.service.js file
         'workflow',
-        [],
+        []
       )
     },
   },

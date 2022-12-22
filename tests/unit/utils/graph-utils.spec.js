@@ -24,8 +24,8 @@ describe('Graph functionality', () => {
       // e,211.5,156.5 61.5,388.5 61.5,269.19 87.195,162.7 201.3,156.76
       expect(
         posToPath(
-          'e,211.5,156.5 61.5,388.5 61.5,269.19 87.195,162.7 201.3,156.76',
-        ),
+          'e,211.5,156.5 61.5,388.5 61.5,269.19 87.195,162.7 201.3,156.76'
+        )
       ).to.equal(
         // the second point in the pos is the first point in the path
         // (because GraphViz, that's why)
@@ -36,7 +36,7 @@ describe('Graph functionality', () => {
           // (because GraphViz, that's why)
           // we use a straight line segment, it should be a curve, but, the
           // difference isn't noticeable
-          + 'L 211.5 -156.5',
+          + 'L 211.5 -156.5'
       )
     })
   })

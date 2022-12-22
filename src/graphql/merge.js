@@ -38,10 +38,10 @@ function mergeQueries(queryA, queryB) {
   }
   // Find the operation definitions for the two queries.
   const queryADefinitions = queryA.definitions.filter(
-    (definition) => definition.kind === 'OperationDefinition',
+    (definition) => definition.kind === 'OperationDefinition'
   )
   const queryBDefinitions = queryB.definitions.filter(
-    (definition) => definition.kind === 'OperationDefinition',
+    (definition) => definition.kind === 'OperationDefinition'
   )
   // More validations...
   if (queryADefinitions.length !== 1 || queryBDefinitions.length !== 1) {
@@ -50,14 +50,14 @@ function mergeQueries(queryA, queryB) {
   // Merge the query definitions.
   const definition = mergeDefinitions(
     queryADefinitions[0],
-    queryBDefinitions[0],
+    queryBDefinitions[0]
   )
   // Merge the fragments.
   const queryAFragments = queryA.definitions.filter(
-    (definition) => definition.kind === 'FragmentDefinition',
+    (definition) => definition.kind === 'FragmentDefinition'
   )
   const queryBFragments = queryB.definitions.filter(
-    (definition) => definition.kind === 'FragmentDefinition',
+    (definition) => definition.kind === 'FragmentDefinition'
   )
   const fragments = mergeFragments(queryAFragments, queryBFragments)
   // Finally return the merged definitions and fragments (loc in the AST nodes
@@ -93,11 +93,11 @@ function mergeFragments(fragmentsA, fragmentsB) {
       // Else we need to merge the fragments.
       existingFragment.selectionSet = mergeSelectionSets(
         existingFragment.selectionSet,
-        fragment.selectionSet,
+        fragment.selectionSet
       )
       existingFragment.directives = mergeDirectives(
         existingFragment.directives,
-        fragment.directives,
+        fragment.directives
       )
     }
   })
@@ -117,7 +117,7 @@ function mergeSelectionSets(selectionSetA, selectionSetB) {
   }
   if ((!selectionSetA && selectionSetB) || (selectionSetA && !selectionSetB)) {
     throw new Error(
-      'Selection sets must be either both undefined, or both defined',
+      'Selection sets must be either both undefined, or both defined'
     )
   }
   const selectionSet = selectionSetA
@@ -129,7 +129,7 @@ function mergeSelectionSets(selectionSetA, selectionSetB) {
     if (selection.kind === 'InlineFragment') {
       throw new Error(
         'Found a selection of type "InlineFragment".'
-        + ' Only "Field" and "FragmentSpread" are supported',
+        + ' Only "Field" and "FragmentSpread" are supported'
       )
     }
     const selectionName = selection.alias
@@ -141,7 +141,7 @@ function mergeSelectionSets(selectionSetA, selectionSetB) {
     if (field.kind === 'InlineFragment') {
       throw new Error(
         'Found a selection of type "InlineFragment".'
-        + ' Only "Field" and "FragmentSpread" are supported',
+        + ' Only "Field" and "FragmentSpread" are supported'
       )
     }
     const selectionName = field.alias ? field.alias.value : field.name.value
@@ -155,21 +155,21 @@ function mergeSelectionSets(selectionSetA, selectionSetB) {
       if (existingField.kind !== field.kind) {
         throw new Error(
           `Cannot merge selections "${selectionName}" with `
-          + `type ${existingField.kind} and ${field.kind}`,
+          + `type ${existingField.kind} and ${field.kind}`
         )
       }
       existingField.directives = mergeDirectives(
         existingField.directives,
-        field.directives,
+        field.directives
       )
       existingField.arguments = mergeArguments(
         existingField.arguments,
-        field.arguments,
+        field.arguments
       )
       // NB: recursion
       existingField.selectionSet = mergeSelectionSets(
         existingField.selectionSet,
-        field.selectionSet,
+        field.selectionSet
       )
       // We do not merge fragment spread... after all, how can we merge
       // ...Fragment and ...Fragment?
@@ -201,7 +201,7 @@ function mergeFields(fieldA, fieldB) {
     // NB: possible recursion here
     field.selectionSet = mergeSelectionSets(
       field.selectionSet,
-      fieldB.selectionSet,
+      fieldB.selectionSet
     )
   }
   return field
@@ -232,12 +232,12 @@ function mergeArguments(argumentsA, argumentsB) {
         throw new Error(
           `Cannot merge arguments "${existingArgument.name.value}" and`
           + ` "${argument.name.value}" with different types`
-          + ` "${existingArgument.kind}" and "${argument.kind}"`,
+          + ` "${existingArgument.kind}" and "${argument.kind}"`
         )
       }
       existingArgument.value = mergeValues(
         existingArgument.value,
-        argument.value,
+        argument.value
       )
     }
   })
@@ -281,7 +281,7 @@ function mergeValues(valueA, valueB) {
     if (valueA.name.value !== valueB.name.value) {
       throw new Error(
           `Cannot merge VariableNode's with different variables`
-        + ` "${valueA.name.value}" and "${valueB.name.value}"`,
+        + ` "${valueA.name.value}" and "${valueB.name.value}"`
       )
     }
     break
@@ -300,7 +300,7 @@ function mergeValues(valueA, valueB) {
       if (
         !valueA.values.find(
           (element) =>
-            element.kind === value.kind && element.value === value.value,
+            element.kind === value.kind && element.value === value.value
         )
       ) {
         valueA.values.push(value)
@@ -322,7 +322,7 @@ function mergeValues(valueA, valueB) {
     const objectB = removeAstLoc(valueB)
     if (!isEqual(objectA, objectB)) {
       throw new Error(
-        'Cannot merge two object values if they have different properties',
+        'Cannot merge two object values if they have different properties'
       )
     }
     break
@@ -375,11 +375,11 @@ function mergeDefinitions(definitionA, definitionB) {
   // already (above).
   definition.directives = mergeDirectives(
     definitionA.directives,
-    definitionB.directives,
+    definitionB.directives
   )
   definition.selectionSet = mergeSelectionSets(
     definitionA.selectionSet,
-    definitionB.selectionSet,
+    definitionB.selectionSet
   )
   return definition
 }

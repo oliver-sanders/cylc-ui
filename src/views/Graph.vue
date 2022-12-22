@@ -435,7 +435,7 @@ export default {
         `  rankdir=${this.transpose ? 'LR' : 'TB'}`,
         `  nodesep=${spacing}`,
         `  ranksep=${spacing * 2}`,
-        '  node [shape="rect"]',
+        '  node [shape="rect"]'
       )
       for (const node of nodes) {
         // use an HTML-like GraphViz node label to allow fine control over
@@ -493,13 +493,13 @@ export default {
             .map((n) => n.id)
             .reduce((x, y) => {
               return x + y
-            }, 1),
+            }, 1)
       )
     },
     reset() {
       // pan / zoom so that the graph is centered and in frame
       this.panZoomTo(
-        this.$refs.graph.getElementsByClassName('svg-pan-zoom_viewport')[0],
+        this.$refs.graph.getElementsByClassName('svg-pan-zoom_viewport')[0]
       )
     },
     panZoomTo(ele) {

@@ -67,7 +67,7 @@ const hasSubscriptionOperation = function (graphQlParams) {
 const graphQLFetcher = function (
   subscriptionsClient,
   fallbackFetcher,
-  component,
+  component
 ) {
   component.subscription = null
   return function (graphQLParams) {
@@ -78,7 +78,7 @@ const graphQLFetcher = function (
       return {
         subscribe: function (observer) {
           observer.next(
-            'Your subscription data will appear here after server publication!',
+            'Your subscription data will appear here after server publication!'
           )
           const subscription = subscriptionsClient.request(
             {
@@ -91,7 +91,7 @@ const graphQLFetcher = function (
               } else {
                 observer.next(result)
               }
-            },
+            }
           )
           component.subscription = subscription.subscribe((result, err) => {
             if (err) {

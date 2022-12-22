@@ -137,7 +137,7 @@ export default {
       const result = await this.$workflowService.query(
         queryName,
         { id: this.cylcObject.id },
-        [{ name: queryField }],
+        [{ name: queryField }]
       )
       const model = cloneDeep(result[queryName][queryField])
       this.type = findByName(this.types, model.__typename)

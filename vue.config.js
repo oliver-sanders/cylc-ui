@@ -61,7 +61,7 @@ module.exports = {
         // eslint-disable-next-line no-unused-vars
         onDetected ({ module: webpackModuleRecord, paths, compilation }) {
           compilation.errors.push(
-            new Error(`Cyclic dependency: ${paths.join(' -> ')}`),
+            new Error(`Cyclic dependency: ${paths.join(' -> ')}`)
           )
         },
       }),
@@ -108,7 +108,7 @@ module.exports = {
       config.output
         .devtoolModuleFilenameTemplate('[absolute-resource-path]')
         .devtoolFallbackModuleFilenameTemplate(
-          '[absolute-resource-path]?[hash]',
+          '[absolute-resource-path]?[hash]'
         )
     }
   },

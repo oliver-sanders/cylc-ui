@@ -47,7 +47,7 @@ describe('tasks', () => {
         [
           TaskState.RUNNING.name, // expected
           [TaskState.WAITING, TaskState.SUBMITTED, TaskState.RUNNING].map(
-            (state) => state.name,
+            (state) => state.name
           ),
         ], // childStates
         [
@@ -57,7 +57,7 @@ describe('tasks', () => {
         [
           TaskState.RUNNING.name,
           [TaskState.SUBMITTED, TaskState.RUNNING, TaskState.EXPIRED].map(
-            (state) => state.name,
+            (state) => state.name
           ),
         ],
       ].forEach((val) => {

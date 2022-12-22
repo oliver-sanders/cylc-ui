@@ -131,7 +131,7 @@ export default {
     },
     setBorderWidth() {
       const i = this.getDrawerElement().querySelector(
-        '.v-navigation-drawer__border',
+        '.v-navigation-drawer__border'
       )
       i.style.width = this.navigation.borderSize + 'px'
       i.style.cursor = 'ew-resize'
@@ -160,7 +160,7 @@ export default {
           if (e.preventDefault) e.preventDefault()
           return false
         },
-        false,
+        false
       )
       document.addEventListener(
         'mouseup',
@@ -176,7 +176,7 @@ export default {
             window.dispatchEvent(new Event('resize'))
           }, 600)
         },
-        false,
+        false
       )
     },
   },

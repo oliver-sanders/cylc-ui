@@ -112,7 +112,7 @@ describe('EditRuntimeForm Component', () => {
         expect(INITIAL_DATA).not.to.have.key('__typename')
         expect(wrapper.vm.model).to.deep.equal(INITIAL_DATA)
         expect(wrapper.vm.initialData).to.deep.equal(INITIAL_DATA)
-      },
+      }
     )
   })
 

@@ -172,7 +172,7 @@ export default {
         (x) =>
           Boolean(
             !x
-              || x.match(TIME_POINT_REGEX),
+              || x.match(TIME_POINT_REGEX)
           ) || 'Invalid',
       ],
     },

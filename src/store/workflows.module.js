@@ -273,7 +273,7 @@ function applyInheritance(state, node) {
 
     // remove old tasks
     for (const child of node.children.filter(
-      (child) => child.type === 'task',
+      (child) => child.type === 'task'
     )) {
       if (childTasks.filter((x) => x.id === child.id).length === 0) {
         removeChild(state, child, node)

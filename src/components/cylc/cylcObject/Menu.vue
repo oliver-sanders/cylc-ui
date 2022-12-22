@@ -208,7 +208,7 @@ export default {
           .sort(
             (x, y) =>
               shortList.indexOf(x.mutation.name)
-              - shortList.indexOf(y.mutation.name),
+              - shortList.indexOf(y.mutation.name)
           )
       }
       return this.mutations
@@ -299,7 +299,7 @@ export default {
       mutate(
         mutation,
         getMutationArgsFromTokens(mutation, this.node.tokens),
-        this.$workflowService.apolloClient,
+        this.$workflowService.apolloClient
       )
       this.showMenu = false
     },
@@ -324,7 +324,7 @@ export default {
           type,
           this.node.tokens,
           mutations,
-          this.user.permissions,
+          this.user.permissions
         ).sort((a, b) => a.mutation.name.localeCompare(b.mutation.name))
       })
       this.showMenu = true
