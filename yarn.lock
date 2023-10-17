@@ -1430,11 +1430,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cypress/vue@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "@cypress/vue@npm:4.0.0"
-  dependencies:
-    "@vue/test-utils": 2.0.0-rc.19
+"@cypress/vue@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "@cypress/vue@npm:6.0.0"
   peerDependencies:
     "@cypress/webpack-dev-server": "*"
     cypress: ">=7.0.0"
@@ -1442,7 +1440,7 @@ __metadata:
   peerDependenciesMeta:
     "@cypress/webpack-dev-server":
       optional: true
-  checksum: 69226317cf2245d855c4b33521cbcf923cc3533b605094615a4496b2f5069f4e7d7fe986df1f705a474e29f1134d33989a29672933d487ba0fd721408df1c70e
+  checksum: f536b485aa7e44896900a8fa05ae4f815e75b8d947bae62dad0af8885e10a8876d263c295dc5fd3f178acbf2ad7031deb1cb0ddb8298a436fd5dc16c2f7fa8e5
   languageName: node
   linkType: hard
 
@@ -3012,15 +3010,6 @@ __metadata:
     html-webpack-plugin: ">=2.26.0"
     webpack: ">=4.0.0"
   checksum: 91afc6f0f018ac52d1e88d3414cb577264148e236b7e27b8e9269c571a2da7efd06d14fb940e146ea1760111284fee139ead7bc523c944f52f667d9125035f25
-  languageName: node
-  linkType: hard
-
-"@vue/test-utils@npm:2.0.0-rc.19":
-  version: 2.0.0-rc.19
-  resolution: "@vue/test-utils@npm:2.0.0-rc.19"
-  peerDependencies:
-    vue: ^3.0.1
-  checksum: 6c0096b0bf4861c6edd5d11a18d0e2c6643bcad17219b43ca8bef01816e82edd5153662310407e32fb2a51b56f6de58cb62165121c55c66da1ceecd50b3d7806
   languageName: node
   linkType: hard
 
@@ -6233,7 +6222,7 @@ __metadata:
     "@babel/eslint-parser": ^7.16.5
     "@babel/preset-env": ^7.14.8
     "@cypress/code-coverage": ^3.9.12
-    "@cypress/vue": ^4.0.0
+    "@cypress/vue": ^6.0.0
     "@cypress/webpack-preprocessor": ^5.11.0
     "@lumino/algorithm": ^1.9.1
     "@lumino/default-theme": ^0.22.0
