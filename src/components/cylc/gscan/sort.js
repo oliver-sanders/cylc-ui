@@ -99,6 +99,15 @@ export function flattenWorkflowParts (node) {
       name: child.id.substring(node.parent.length + 1), // (parent ID doesn't include slash so add 1)
       parent: node.parent,
     })
+  } else if (node.type === 'workflow-part' && node.children.length > 0) {
+    const ret = {
+      ...node,
+      children: []
+    }
+    for (const child of node.children) {
+      ret.children.push(flattenWorkflowParts(child))
+    }
+    return ret
   }
   return node
 }
