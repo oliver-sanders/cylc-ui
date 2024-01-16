@@ -17,7 +17,11 @@
 import pick from 'lodash/pick'
 import isArray from 'lodash/isArray'
 import { Tokens } from '@/utils/uid'
-import { sortedIndexBy } from '@/components/cylc/common/sort'
+// import { sortedIndexBy } from '@/components/cylc/common/sort'
+import {
+  AvlTree,
+  AvlTreeNode
+} from '@datastructures-js/binary-search-tree'
 
 const NODE_TYPES = [
   'user',
@@ -28,10 +32,77 @@ const NODE_TYPES = [
   'job'
 ]
 
+function sortKey (string, intLen = 5) {
+  let ret = ''
+
+  // split string on numbers
+  const parts = string.split(/(\d+)/)
+
+  for (let i = 0; i < parts.length; i++) {
+    const part = parts[i]
+    if (i % 2 === 0) {
+      // this part is a string => convert to lower case
+      ret += part.toLowerCase()
+    } else {
+      // this part is a number => zero-pad it is requested
+      const pad = intLen - part.length
+      if (pad > 0) {
+        // number is shorter than the minimum => zero-pad it
+        ret += `${Array(pad + 1).join('0')}${part}`
+      } else {
+        // number is already too long => leave it as is
+        ret += part
+      }
+    }
+  }
+
+  return ret
+}
+
+const defaultCompare = (a, b) => {
+  if (a === b) return 0
+  return a > b ? 1 : -1
+}
+
+class CylcTree extends AvlTree {
+  constructor () {
+    super(
+      defaultCompare,
+      { key: 'id' }
+    )
+  }
+
+  [Symbol.iterator] () {
+    const ret = []
+    this.traverseInOrder((node) => {
+      ret.push(node.getValue())
+    })
+    return ret.values()
+  }
+
+  // TODO, try [[Get]] or [[GetOwnProperty]]
+  findIndex (index) {
+    index++
+    let node
+    let counter = 0
+    this.traverseInOrder(
+      (_node) => {
+        node = _node
+        counter++
+      },
+      () => counter === index
+    )
+    return node.getValue()
+    
+    // compare to this to confirm it's working
+    // return [...this][index]
+  }
+}
+
 const state = () => ({
   cylcTree: {
     $index: {},
-    children: []
+    children: new CylcTree()
   },
   /**
    * This holds the name of the current workflow. This is set by VueRouter
@@ -95,7 +166,7 @@ function createTree (state) {
   state.cylcTree = {
     $index: {},
     id: '$root',
-    children: [],
+    children: new CylcTree(),
   }
   // console.log('@@')
 }
@@ -154,23 +225,24 @@ function addChild (parentNode, childNode) {
   }
 
   // insert the child preserving sort order
-  let comparator
-  if (['cycle', 'family'].includes(parentNode.type)) {
-    // sort by type, then name
-    // (this makes families sort before tasks in the graph)
-    comparator = (n) => `${n.type}-${n.name}`
-  } else {
-    // sort by name
-    comparator = (n) => n.name
-  }
-  const reverse = ['cycle', 'job'].includes(childNode.type)
-  const index = sortedIndexBy(
-    parentNode[key],
-    childNode,
-    comparator,
-    { reverse }
-  )
-  parentNode[key].splice(index, 0, childNode)
+  // let comparator
+  // if (['cycle', 'family'].includes(parentNode.type)) {
+  //   // sort by type, then name
+  //   // (this makes families sort before tasks in the graph)
+  //   comparator = (n) => `${n.type}-${n.name}`
+  // } else {
+  //   // sort by name
+  //   comparator = (n) => n.name
+  // }
+  // const reverse = ['cycle', 'job'].includes(childNode.type)
+  // const index = sortedIndexBy(
+  //   parentNode[key],
+  //   childNode,
+  //   comparator,
+  //   { reverse }
+  // )
+  // parentNode[key].splice(index, 0, childNode)
+  parentNode[key].insert(childNode)
 }
 
 /* Remove a child node from a parent node. */
@@ -189,9 +261,10 @@ function removeChild (state, node, parentNode = null) {
       return
     }
   }
-  parentNode[key].splice(
-    parentNode[key].indexOf(node), 1
-  )
+  // parentNode[key].splice(
+  //   parentNode[key].indexOf(node), 1
+  // )
+  parentNode[key].remove(node)
 }
 
 /* Recursively remove a node and anything underneath it.
@@ -202,12 +275,12 @@ function removeChild (state, node, parentNode = null) {
 function removeTree (state, node, removeParent = true) {
   let pointer
   const stack = [
-    ...node.children || [],
-    ...node.familyTree || []
+    ...node.children || new CylcTree(),
+    ...node.familyTree || new CylcTree()
   ]
   const removeIndicies = [
-    ...node.$namespaces || [],
-    ...node.$edges || []
+    ...node.$namespaces || new CylcTree(),
+    ...node.$edges || new CylcTree()
   ]
   const removeNodes = []
   while (stack.length) {
@@ -215,8 +288,8 @@ function removeTree (state, node, removeParent = true) {
     // deletion
     pointer = stack.pop()
     stack.push(
-      ...(pointer.children || []),
-      ...(pointer.familyTree || []),
+      ...(pointer.children || new CylcTree()),
+      ...(pointer.familyTree || new CylcTree()),
     )
     removeIndicies.push(
       ...(pointer.$namespaces || []),
@@ -246,7 +319,7 @@ function cleanParents (state, node) {
     if (pointer.type !== 'workflow') {
       // don't prune workflow nodes
       // (this requires an explicit instruction to do so)
-      if (!pointer.children.length) {
+      if (!pointer.children.count()) {
         // node has no children -> prune it
         removeIndex(state, node.id)
         removeChild(state, pointer)
@@ -266,7 +339,11 @@ function cleanParents (state, node) {
 function applyInheritance (state, node) {
   if (node.type === 'family' && node.node.childTasks) {
     // build a mapping of {childID: childNode} for faster lookup
-    const childIDs = node.children.reduce((map, obj) => { map[obj.id] = obj; return map }, {})
+    // const childIDs = node.children.reduce((map, obj) => { map[obj.id] = obj; return map }, {})
+    const childIDs = {}
+    for (const child of node.children) {
+      childIDs[child.id] = child
+    }
     for (const child of node.node.childTasks) {
       if (!(child.id in childIDs)) {
         // add any new tasks to the family
@@ -387,9 +464,16 @@ function createTreeNode (state, id, tokens, node) {
     } else {
       childAttribute = 'children'
     }
-    const child = pointer[childAttribute].find(
-      ({ name }) => name === partName
-    )
+    // const child = pointer[childAttribute].find(
+    //   ({ name }) => name === partName
+    // )
+    let child
+    for (const _child of pointer[childAttribute]) {
+      if (_child.name === partName) {
+        child = _child
+        break
+      }
+    }
     if (!child) {
       // create intermediate node...
       // ...add a tree item
@@ -405,8 +489,8 @@ function createTreeNode (state, id, tokens, node) {
         parent: pointer.id,
         tokens: partTokens,
         type: partType,
-        children: [],
-        familyTree: partType === 'cycle' ? [] : undefined,
+        children: new CylcTree(),
+        familyTree: partType === 'cycle' ? new CylcTree() : undefined,
       }
       // add child to the tree
       addChild(pointer, intermediateItem)
@@ -418,10 +502,10 @@ function createTreeNode (state, id, tokens, node) {
     }
   }
 
-  if (pointer.children.some(child => child.id === id)) {
-    // node already in the tree
-    return
-  }
+  // if (pointer.children.some(child => child.id === id)) {
+  //   // node already in the tree
+  //   return
+  // }
 
   const treeNode = {
     id,
@@ -430,8 +514,8 @@ function createTreeNode (state, id, tokens, node) {
     type,
     parent: pointer.id,
     node,
-    children: [],
-    familyTree: type === 'cycle' ? [] : undefined,
+    children: new CylcTree(),
+    familyTree: type === 'cycle' ? new AvlTree() : undefined,
 
   }
   return [pointer, treeNode]

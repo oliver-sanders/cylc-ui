@@ -173,7 +173,7 @@ export default {
 
   computed: {
     workflows () {
-      if (!this.workflowTree?.children.length) {
+      if (!this.workflowTree?.children.count()) {
         // no user in the data store (i.e. data loading)
         return []
       }
@@ -214,7 +214,7 @@ export default {
           this.filters['workflow state'],
           this.filters['task state']
         )
-      } else if (node.type === 'workflow-part' && node.children.length) {
+      } else if (node.type === 'workflow-part' && node.children.count()) {
         for (const child of node.children) {
           isMatch = this.filterNode(child, filteredOutNodesCache, nameMatch) || isMatch
           // Note: do not break early as we must run the filter over all children

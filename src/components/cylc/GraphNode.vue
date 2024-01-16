@@ -155,23 +155,34 @@ export default {
       return `graph-node-${this.task.id}`
     },
     startTime () {
-      return this.jobs?.[0]?.node?.startedTime
+      if (this.jobs.count()) {
+        return this.jobs.findIndex(0).node?.startedTime
+      }
     },
     jobsForDisplay () {
       // the first `this.maxJobs` items of `this.jobs`
-      return this.jobs.slice(0, this.maxJobs)
+      const ret = []
+      let counter = 0
+      for (const job of this.jobs) {
+        if (counter > this.maxJobs) {
+          return
+        }
+        ret.push(job)
+        counter++
+      }
+      return ret
     },
     numOverflowJobs () {
       // the number of overflowing (i.e. hidden) jobs
-      if (this.jobs.length > this.maxJobs) {
-        return this.jobs.length - this.maxJobs
+      if (this.jobs.count() > this.maxJobs) {
+        return this.jobs.count() - this.maxJobs
       }
       return 0
     },
     labelTransform () {
       // if there are no jobs then nudge the text (task / cycle) down a little
       // so that it is centered on the task icon
-      if (this.jobs.length) {
+      if (this.jobs.count()) {
         return ''
       }
       return 'translate(0, 14)'

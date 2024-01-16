@@ -71,7 +71,7 @@ function gscanWorkflowCompValue (node) {
  */
 export function sortedWorkflowTree (cylcTree) {
   const tree = []
-  for (let node of cylcTree.children[0].children) {
+  for (let node of cylcTree.children.findIndex(0).children) {
     node = flattenWorkflowParts(node)
     if (node) {
       // insert this workflow / workflow-part in sort order
@@ -98,14 +98,14 @@ export function flattenWorkflowParts (node) {
   if (node.type !== 'workflow-part') {
     return node
   }
-  if (node.children.length === 1) {
-    const child = node.children[0]
+  if (node.children.count() === 1) {
+    const child = node.children.findIndex(0)
     return flattenWorkflowParts({
       ...child,
       name: child.id.substring(node.parent.length + 1), // (parent ID doesn't include slash so add 1)
       parent: node.parent,
     })
-  } else if (node.children.length > 1) {
+  } else if (node.children.count() > 1) {
     return {
       ...node,
       children: node.children.map((n) => flattenWorkflowParts(n))

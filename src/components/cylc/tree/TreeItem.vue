@@ -80,11 +80,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             >
               <!-- most recent job summary -->
               <Job
-                v-for="(job, index) in node.children.slice(0, 1)"
+                v-for="(job, index) in [...node.children].slice(0, 1)"
                 v-cylc-object="job"
                 :key="`${job.id}-summary-${index}`"
                 :status="job.node.state"
-                :previous-state="node.children.length > 1 ? node.children[1].node.state : ''"
+                :previous-state="node.children.count() > 1 ? node.children.findIndex(1).node.state : ''"
                 style="margin-left: 0.25em;"
               />
             </div>
@@ -276,7 +276,7 @@ export default {
         // "job" nodes have auto-generated "job-detail" nodes
         this.node.type === 'job' ||
         // otherwise look to see whether there are any children
-        Boolean(this.node.children?.length)
+        Boolean(this.node.children?.count())
       )
     },
     /** returns child nodes following the family tree and following sort order */
