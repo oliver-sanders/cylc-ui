@@ -72,13 +72,24 @@ class CylcTree extends AvlTree {
     )
   }
 
-  [Symbol.iterator] () {
-    const ret = []
-    this.traverseInOrder((node) => {
-      ret.push(node.getValue())
-    })
-    return ret.values()
+  * [Symbol.iterator] () {
+    const traverseRecursive = function * (current) {
+      if (current === null) return;
+      yield * traverseRecursive(current.getLeft())
+      yield current.getValue()
+      yield * traverseRecursive(current.getRight())
+    };
+
+    yield * traverseRecursive(this._root);
   }
+
+  // [Symbol.iterator] () {
+  //   const ret = []
+  //   this.traverseInOrder((node) => {
+  //     ret.push(node.getValue())
+  //   })
+  //   return ret.values()
+  // }
 
   // TODO, try [[Get]] or [[GetOwnProperty]]
   findIndex (index) {
