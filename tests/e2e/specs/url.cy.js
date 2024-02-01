@@ -49,7 +49,7 @@ describe('URL handling', () => {
         owner: 'user'
       }
     })
-    cy.visit('/#').get('#app')
+    cy.visit('/#/').get('#app')
     cy.url().should('contain', 'noAuth')
   })
 })
