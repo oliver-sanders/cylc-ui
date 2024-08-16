@@ -211,9 +211,9 @@ export default {
 
     // prefixes a tick or cross before the entry
     .condition:before {
-      content: '✕';
+      content: '☐';
       padding-right: 0.5em;
-      color: rgb(255, 100, 100);
+      color: rgb(0, 0, 0);
     }
     .condition.satisfied:before {
       content: '✓';
