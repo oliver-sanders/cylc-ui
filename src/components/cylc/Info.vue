@@ -122,13 +122,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <v-expansion-panel-title color="blue-grey-lighten-1">
           Outputs
         </v-expansion-panel-title>
-        <v-expansion-panel-text>
+        <v-expansion-panel-text class="pt-2">
           <ul>
             <li v-for="output in outputs" :key="output.label">
-              <span
-                class="condition"
-                :class="{satisfied: output.satisfied}"
-              >{{ output.label }}</span>
+              <v-chip
+                :text="output.label"
+                variant="text"
+                v-bind="output.satisfied ? {
+                  prependIcon: icons.mdiCheckCircleOutline,
+                  class: 'font-weight-medium',
+                }: {
+                  prependIcon: icons.mdiProgressHelper,
+                  color: 'grey',
+                }"
+                data-cy="output-chip"
+              />
             </li>
           </ul>
         </v-expansion-panel-text>
@@ -139,6 +147,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 </template>
 
 <script>
+import {
+  mdiCheckCircleOutline,
+  mdiProgressHelper,
+} from '@mdi/js'
 import { useJobTheme } from '@/composables/localStorage'
 import GraphNode from '@/components/cylc/GraphNode.vue'
 
@@ -162,6 +174,10 @@ export default {
   setup (props, { emit }) {
     return {
       jobTheme: useJobTheme(),
+      icons: {
+        mdiProgressHelper,
+        mdiCheckCircleOutline,
+      },
     }
   },
 
@@ -207,17 +223,6 @@ export default {
     // for user-defined text where whitespace should be preserved
     .markup {
       white-space: pre;
-    }
-
-    // prefixes a tick or cross before the entry
-    .condition:before {
-      content: '☐';
-      padding-right: 0.5em;
-      color: rgb(0, 0, 0);
-    }
-    .condition.satisfied:before {
-      content: '✓';
-      color: rgb(75, 230, 75);
     }
 
     // for prerequsite task "aliases" (used in conditional expressions)
