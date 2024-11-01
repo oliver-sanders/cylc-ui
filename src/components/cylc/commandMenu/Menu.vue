@@ -33,7 +33,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
           {{ node.id }}
         </v-card-title>
         <v-card-subtitle class="pt-0 pb-2">
-          {{ typeAndStatusText }}
+          <span>{{ typeAndStatusText }}</span>
+          <br />
+          <template
+            v-for="[name, type, args] in actions"
+          >
+            <template v-if="type === 'lab' && user.extensions?.lab">
+              <v-chip :href="args" target="_blank"><v-icon style="margin-right: 0.2em;">{{ $options.icons.jupyterLogo }}</v-icon> {{ name }}</v-chip>
+            </template>
+          </template>
         </v-card-subtitle>
         <v-divider v-if="primaryMutations.length || displayMutations.length" />
         <v-skeleton-loader
@@ -124,6 +132,21 @@ import {
 import { mapGetters, mapState } from 'vuex'
 import WorkflowState from '@/model/WorkflowState.model'
 import { eventBus } from '@/services/eventBus'
+import gql from 'graphql-tag'
+import { jupyterLogo } from '@/utils/icons'
+
+const WORKFLOW_SOURCE_QUERY = gql`
+query WorkflowSourceQuery ($workflows: [ID]) {
+  workflows(ids: $workflows) {
+    id
+    source {
+      name
+      path
+      relativePath
+    }
+  }
+}
+`
 
 export default {
   name: 'CommandMenu',
@@ -142,6 +165,7 @@ export default {
 
   data () {
     return {
+      actions: [],
       dialog: false,
       dialogMutation: null,
       dialogKey: false,
@@ -165,6 +189,7 @@ export default {
 
   computed: {
     ...mapGetters('workflows', ['getNodes']),
+    ...mapState('user', ['user']),
 
     primaryMutations () {
       return this.$workflowService.primaryMutations[this.node.type] || []
@@ -173,8 +198,6 @@ export default {
     canExpand () {
       return this.primaryMutations.length && this.mutations.length > this.primaryMutations.length
     },
-
-    ...mapState('user', ['user']),
 
     displayMutations () {
       if (!this.mutations.length) {
@@ -279,6 +302,7 @@ export default {
     },
 
     async showMutationsMenu ({ node, target }) {
+      this.actions = []
       this.target = target
       this.node = node
       this.expanded = false
@@ -304,6 +328,7 @@ export default {
       ).sort(
         (a, b) => a.mutation.name.localeCompare(b.mutation.name)
       )
+      await this.populateActions()
     },
 
     initialData (mutation, tokens) {
@@ -316,11 +341,27 @@ export default {
       } else {
         this.callMutationFromContext(mutation)
       }
+    },
+
+    async populateActions () {
+      if (this.node.type === 'workflow') {
+        const ret = await this.$workflowService.query2(
+          WORKFLOW_SOURCE_QUERY,
+          { workflows: [this.node.id] }
+        )
+        const source_dir = ret.data?.workflows[0]?.source?.relativePath
+        if (source_dir) {
+          this.actions.push(
+            ['open source', 'lab', `${this.user.extensions?.lab}/tree/${source_dir}`]
+          )
+        }
+      }
     }
   },
 
   icons: {
     mdiPencil,
+    jupyterLogo,
   },
 }
 </script>
