@@ -6268,7 +6268,7 @@ __metadata:
     express: ^4.17.2
     express-ws: ^5.0.2
     graphiql: ~1.8.0
-    graphql: ~15.8.0
+    graphql: ~15.11.0
     graphql-language-service-utils: ^2.5.3
     graphql-tag: ~2.12.6
     istanbul-instrumenter-loader: ^3.0.1
@@ -8982,10 +8982,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:~15.8.0":
-  version: 15.8.0
-  resolution: "graphql@npm:15.8.0"
-  checksum: 423325271db8858428641b9aca01699283d1fe5b40ef6d4ac622569ecca927019fce8196208b91dd1d8eb8114f00263fe661d241d0eb40c10e5bfd650f86ec5e
+"graphql@npm:~15.11.0":
+  version: 15.11.0
+  resolution: "graphql@npm:15.11.0"
+  checksum: 0c72af5d4f5ec3fe38c1c8ada07c55813a5af946d64d728edc0d06c96ad6382eb0fad4a5a8c7ed179dc78b16c6d95ede27b0f3a11000ee3ef4f26dfb3a754888
   languageName: node
   linkType: hard
 
